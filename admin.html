@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NBA Quiz — Admin Review</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* LOGIN */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 40px;
+      width: 360px;
+      text-align: center;
+    }
+
+    .login-box h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .login-box h1 span { color: #FF6B00; }
+
+    .login-box p {
+      color: #555;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    .login-box input {
+      width: 100%;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    .login-box input:focus { border-color: #FF6B00; }
+
+    .login-error {
+      color: #ef4444;
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    /* BUTTONS */
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary { background: #FF6B00; color: #fff; }
+    .btn-primary:hover { background: #e05e00; }
+    .btn-approve { background: #22c55e; color: #fff; flex: 1; }
+    .btn-approve:hover { background: #16a34a; }
+    .btn-reject { background: #ef4444; color: #fff; flex: 1; }
+    .btn-reject:hover { background: #dc2626; }
+    .btn-edit { background: #1a1a1a; color: #FF6B00; border: 1.5px solid #FF6B00; flex: 1; }
+    .btn-edit:hover { background: #1e1208; }
+    .btn-save { background: #3b82f6; color: #fff; flex: 1; }
+    .btn-save:hover { background: #2563eb; }
+
+    /* MAIN */
+    #main-screen { display: none; }
+
+    .topbar {
+      background: #111;
+      border-bottom: 1px solid #1e1e1e;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .topbar-title span { color: #FF6B00; }
+
+    
+    .topbar-stats {
+      display: flex;
+      gap: 24px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .topbar-stats strong { color: #fff; }
+
+    .content {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    /* EMPTY STATE */
+    #empty-state {
+      text-align: center;
+      padding: 80px 0;
+      display: none;
+    }
+
+    #empty-state h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #22c55e;
+      margin-bottom: 8px;
+    }
+
+    #empty-state p { color: #555; }
+
+    /* CARD */
+    .card {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-progress {
+      font-size: 12px;
+      color: #555;
+    }
+
+    .card-category {
+      font-size: 11px;
+      color: #FF6B00;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+
+    .card-body { padding: 28px 24px; }
+
+    .question-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 28px;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 10px; }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 16px;
+      background: #1a1a1a;
+      border: 1.5px solid #2a2a2a;
+      border-radius: 10px;
+    }
+
+    .option.correct {
+      border-color: #22c55e;
+      background: #0d1f12;
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #252525;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #666;
+      flex-shrink: 0;
+    }
+
+    .option.correct .option-letter { background: #22c55e; color: #fff; }
+
+    .option-text { font-size: 15px; color: #ccc; }
+    .option.correct .option-text { color: #86efac; }
+
+    /* EDIT MODE */
+    .edit-fields { display: none; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .edit-fields.visible { display: flex; }
+
+    .edit-fields label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+
+    .edit-fields input, .edit-fields select {
+      width: 100%;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .edit-fields input:focus, .edit-fields select:focus { border-color: #FF6B00; }
+
+    .card-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #1e1e1e;
+      display: flex;
+      gap: 10px;
+    }
+
+    .progress-bar-wrap {
+      height: 3px;
+      background: #1e1e1e;
+      margin-bottom: 32px;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 3px;
+      background: #FF6B00;
+      border-radius: 99px;
+      transition: width 0.3s;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 80px 0;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>NBA <span>Admin</span></h1>
+    <p>Question Review Queue</p>
+    <input type="password" id="password-input" placeholder="Enter password" />
+    <div class="login-error" id="login-error">Incorrect password</div>
+    <button class="btn btn-primary" onclick="login()">Enter</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-screen">
+  <div class="topbar">
+    <div class="topbar-title">NBA <span>Admin</span></div>
+    <button id="create-btn" class="btn btn-primary" style="width:auto; padding: 8px 20px; font-size:13px;">+ Create Question</button>
+    <div class="topbar-stats">
+      <div>Pending: <strong id="stat-pending">—</strong></div>
+      <div>Approved: <strong id="stat-approved">—</strong></div>
+      <div>Rejected: <strong id="stat-rejected">—</strong></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="loading" id="loading">Loading questions...</div>
+
+    <div id="empty-state">
+      <h2>All done! 🎉</h2>
+      <p>No pending questions left to review.</p>
+    </div>
+
+    <div id="review-card" style="display:none">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-category" id="q-category"></div>
+          <div class="card-progress" id="q-progress"></div>
+        </div>
+
+        <div class="card-body">
+          <!-- Edit fields (hidden by default) -->
+          <div class="edit-fields" id="edit-fields">
+            <div>
+              <label>Question</label>
+              <input type="text" id="edit-question" />
+            </div>
+            <div>
+              <label>Option A</label>
+              <input type="text" id="edit-opt-0" />
+            </div>
+            <div>
+              <label>Option B</label>
+              <input type="text" id="edit-opt-1" />
+            </div>
+            <div>
+              <label>Option C</label>
+              <input type="text" id="edit-opt-2" />
+            </div>
+            <div>
+              <label>Option D</label>
+              <input type="text" id="edit-opt-3" />
+            </div>
+            <div>
+              <label>Correct Answer</label>
+              <select id="edit-answer">
+                <option value="0">A</option>
+                <option value="1">B</option>
+                <option value="2">C</option>
+                <option value="3">D</option>
+              </select>
+            </div>
+            <div>
+              <label>Category</label>
+              <input type="text" id="edit-category" />
+            </div>
+          </div>
+
+          <!-- Display mode -->
+          <div id="display-fields">
+            <div class="question-text" id="q-text"></div>
+            <div class="options" id="q-options"></div>
+          </div>
+        </div>
+
+        <div class="card-footer" id="card-footer">
+          <button class="btn btn-reject" onclick="reject()">✗ Reject</button>
+          <button class="btn btn-edit" onclick="toggleEdit()">✎ Edit</button>
+          <button class="btn btn-approve" onclick="approve()">✓ Approve</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div id="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#1a1a1a; border:1px solid #2a2a2a; border-radius:14px; padding:32px; width:560px; max-height:90vh; overflow-y:auto;">
+    <h2 style="font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; text-transform:uppercase; margin-bottom:24px;">✏️ Create Question</h2>
+    
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Category</label>
+        <select id="new-category" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;">
+          <option>Players</option>
+          <option>Teams</option>
+          <option>Championships</option>
+          <option>Records</option>
+          <option>History</option>
+          <option>Trades</option>
+          <option>Free Agency</option>
+          <option>Contracts</option>
+          <option>Coaches</option>
+          <option>Specific Games</option>
+          <option>Rivalries</option>
+          <option>Draft</option>
+          <option>Ages & Milestones</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Question</label>
+        <input type="text" id="new-question" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;" placeholder="Enter your question..." />
+      </div>
+
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Option A</label>
+        <input type="text" id="new-opt-0" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;" />
+      </div>
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Option B</label>
+        <input type="text" id="new-opt-1" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;" />
+      </div>
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Option C</label>
+        <input type="text" id="new-opt-2" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;" />
+      </div>
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Option D</label>
+        <input type="text" id="new-opt-3" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;" />
+      </div>
+
+      <div>
+        <label style="font-size:11px; color:#555; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Correct Answer</label>
+        <select id="new-answer" style="width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; outline:none;">
+          <option value="0">A</option>
+          <option value="1">B</option>
+          <option value="2">C</option>
+          <option value="3">D</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:24px;">
+      <button class="btn" style="flex:1; background:#1a1a1a; color:#666; border:1px solid #2a2a2a;" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-approve" style="flex:1;" onclick="saveNewQuestion()">⭐ Save Question</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+  // ─── CONFIG ───────────────────────────────────────────────────────────────
+  const SUPABASE_URL  = 'https://ummpkalvghxhundcaxdk.supabase.co'
+  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbXBrYWx2Z2h4aHVuZGNheGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNjY1MTMsImV4cCI6MjA5Mjc0MjUxM30.fl9YJMgnBFGhV7JqAzCwVsVaZoUihN9gJ8sihdKpT00'
+  const ADMIN_PASSWORD = 'Ballislife12'
+  // ──────────────────────────────────────────────────────────────────────────
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+  let questions = []
+  let currentIndex = 0
+  let editMode = false
+  let stats = { pending: 0, approved: 0, rejected: 0 }
+
+  // LOGIN
+  window.login = function () {
+    const val = document.getElementById('password-input').value
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none'
+      document.getElementById('main-screen').style.display = 'block'
+      loadQuestions()
+    } else {
+      document.getElementById('login-error').style.display = 'block'
+    }
+  }
+
+  document.getElementById('password-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.login()
+  })
+
+  // LOAD
+  async function loadQuestions() {
+    const [pendingRes, approvedRes, rejectedRes] = await Promise.all([
+      supabase.from('questions').select('*').eq('status', 'pending'),
+      supabase.from('questions').select('id', { count: 'exact' }).eq('status', 'approved'),
+      supabase.from('questions').select('id', { count: 'exact' }).eq('status', 'rejected'),
+    ])
+
+    questions = pendingRes.data ?? []
+    stats.pending = questions.length
+    stats.approved = approvedRes.data?.length ?? 0
+    stats.rejected = rejectedRes.data?.length ?? 0
+
+    updateStats()
+    document.getElementById('loading').style.display = 'none'
+
+    if (questions.length === 0) {
+      document.getElementById('empty-state').style.display = 'block'
+    } else {
+      document.getElementById('review-card').style.display = 'block'
+      showQuestion()
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('stat-pending').textContent = stats.pending
+    document.getElementById('stat-approved').textContent = stats.approved
+    document.getElementById('stat-rejected').textContent = stats.rejected
+  }
+
+  function showQuestion() {
+    if (currentIndex >= questions.length) {
+      document.getElementById('review-card').style.display = 'none'
+      document.getElementById('empty-state').style.display = 'block'
+      return
+    }
+
+    const q = questions[currentIndex]
+    const total = questions.length
+    const done = currentIndex
+
+    document.getElementById('q-category').textContent = q.category
+    document.getElementById('q-progress').textContent = `${done + 1} of ${total}`
+    document.getElementById('q-text').textContent = q.question
+    document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`
+
+    const optionsEl = document.getElementById('q-options')
+    optionsEl.innerHTML = ''
+    const letters = ['A', 'B', 'C', 'D']
+    q.options.forEach((opt, i) => {
+      const div = document.createElement('div')
+      div.className = `option ${i === q.answer_index ? 'correct' : ''}`
+      div.innerHTML = `
+        <div class="option-letter">${letters[i]}</div>
+        <div class="option-text">${opt}</div>
+      `
+      optionsEl.appendChild(div)
+    })
+
+    // Reset edit mode
+    if (editMode) toggleEdit()
+  }
+
+  // APPROVE
+  window.approve = async function () {
+    const q = questions[currentIndex]
+    await supabase.from('questions').update({ status: 'approved' }).eq('id', q.id)
+    stats.pending--
+    stats.approved++
+    updateStats()
+    currentIndex++
+    showQuestion()
+  }
+
+  // REJECT
+  window.reject = async function () {
+    const q = questions[currentIndex]
+    await supabase.from('questions').update({ status: 'rejected' }).eq('id', q.id)
+    stats.pending--
+    stats.rejected++
+    updateStats()
+    currentIndex++
+    showQuestion()
+  }
+
+  // EDIT
+  window.toggleEdit = function () {
+    editMode = !editMode
+    const q = questions[currentIndex]
+    const editFields = document.getElementById('edit-fields')
+    const displayFields = document.getElementById('display-fields')
+    const footer = document.getElementById('card-footer')
+
+    if (editMode) {
+      editFields.classList.add('visible')
+      displayFields.style.display = 'none'
+      document.getElementById('edit-question').value = q.question
+      document.getElementById('edit-category').value = q.category
+      q.options.forEach((opt, i) => {
+        document.getElementById(`edit-opt-${i}`).value = opt
+      })
+      document.getElementById('edit-answer').value = q.answer_index
+      footer.innerHTML = `
+        <button class="btn btn-reject" onclick="toggleEdit()">✗ Cancel</button>
+        <button class="btn btn-save" onclick="saveEdit()">✓ Save & Approve</button>
+      `
+    } else {
+      editFields.classList.remove('visible')
+      displayFields.style.display = 'block'
+      footer.innerHTML = `
+        <button class="btn btn-reject" onclick="reject()">✗ Reject</button>
+        <button class="btn btn-edit" onclick="toggleEdit()">✎ Edit</button>
+        <button class="btn btn-approve" onclick="approve()">✓ Approve</button>
+      `
+    }
+  }
+
+  // SAVE EDIT
+  window.saveEdit = async function () {
+    const q = questions[currentIndex]
+    const updated = {
+      question: document.getElementById('edit-question').value,
+      category: document.getElementById('edit-category').value,
+      options: [
+        document.getElementById('edit-opt-0').value,
+        document.getElementById('edit-opt-1').value,
+        document.getElementById('edit-opt-2').value,
+        document.getElementById('edit-opt-3').value,
+      ],
+      answer_index: parseInt(document.getElementById('edit-answer').value),
+      status: 'approved',
+    }
+
+    await supabase.from('questions').update(updated).eq('id', q.id)
+    stats.pending--
+    stats.approved++
+    updateStats()
+    currentIndex++
+    showQuestion()
+  }
+  window.openModal = function() {
+  document.getElementById('modal-overlay').style.display = 'flex'
+}
+
+window.closeModal = function() {
+  document.getElementById('modal-overlay').style.display = 'none'
+  // Clear fields
+  document.getElementById('new-question').value = ''
+  document.getElementById('new-opt-0').value = ''
+  document.getElementById('new-opt-1').value = ''
+  document.getElementById('new-opt-2').value = ''
+  document.getElementById('new-opt-3').value = ''
+  document.getElementById('new-answer').value = '0'
+}
+
+window.saveNewQuestion = async function() {
+  const question = document.getElementById('new-question').value.trim()
+  const opt0 = document.getElementById('new-opt-0').value.trim()
+  const opt1 = document.getElementById('new-opt-1').value.trim()
+  const opt2 = document.getElementById('new-opt-2').value.trim()
+  const opt3 = document.getElementById('new-opt-3').value.trim()
+
+  if (!question || !opt0 || !opt1 || !opt2 || !opt3) {
+    alert('Please fill in all fields.')
+    return
+  }
+
+  const newQuestion = {
+    category: document.getElementById('new-category').value,
+    question,
+    options: [opt0, opt1, opt2, opt3],
+    answer_index: parseInt(document.getElementById('new-answer').value),
+    author: 'chris',
+    status: 'approved'
+  }
+
+  const { error } = await supabase.from('questions').insert(newQuestion)
+
+  if (error) {
+    alert('Error saving question: ' + error.message)
+  } else {
+    stats.approved++
+    updateStats()
+    closeModal()
+    alert('Question saved! ⭐')
+  }
+
+}
+
+document.getElementById('create-btn').addEventListener('click', () => {
+  document.getElementById('modal-overlay').style.display = 'flex'
+})
+</script>
+</body>
+</html>
