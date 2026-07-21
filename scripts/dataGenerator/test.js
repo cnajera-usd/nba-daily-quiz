@@ -1,12 +1,24 @@
-import { ppgLeaderQuestion } from "./templates/scoring.js";
+import { statLeaderQuestion } from "./templates/scoring.js";
 import { getLeaderByRank } from "./processor.js";
+import { fetchLeaders} from './fetcher.js'
 
-const question = ppgLeaderQuestion(2023)
+
+await fetchLeaders(2023, 'ast')
+await fetchLeaders(2023, 'reb')
+await fetchLeaders(2023, 'blk')
+await fetchLeaders(2023, 'stl')
+await fetchLeaders(2023, 'tov')
+
+const question = statLeaderQuestion(2023, 'reb')
+
+console.log(statLeaderQuestion(2023, 'reb'))
+console.log(statLeaderQuestion(2023, 'blk'))
+console.log(statLeaderQuestion(2023, 'stl'))
+console.log(statLeaderQuestion(2023, 'tov'))
 console.log(question)
 
 /*
 import { fetchStandings } from './fetcher.js'
-import { fetchLeaders} from './fetcher.js'
 
 
 const standings = await fetchStandings(2023)
