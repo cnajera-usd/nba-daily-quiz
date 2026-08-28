@@ -1,4 +1,4 @@
-import { statLeaderQuestion } from "./templates/scoring.js";
+import { standingsQuestion, statLeaderQuestion } from "./templates/scoring.js";
 import { getLeaderByRank, getStandingByRank } from "./processor.js";
 import { fetchLeaders, fetchStandings} from './fetcher.js'
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
@@ -27,7 +27,10 @@ try {
 }
 */
 
-await fetchStandings(2019)
-getStandingByRank(2019, "conference", "West", 4)
-console.log(getStandingByRank(2019, "conference", "West", 4))
+await fetchLeaders(2018, 'pts')
+await fetchStandings(2018)
+await fetchStandings(2022)
+console.log(standingsQuestion(2022, "conference", "West", 4))
+console.log(standingsQuestion(2018, "conference", "East", 1))
+
 

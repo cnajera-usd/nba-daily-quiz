@@ -1,4 +1,4 @@
-import { getLeaderByRank } from "../processor.js";
+import { getLeaderByRank, getStandingByRank } from "../processor.js";
 
 function shuffle(array) {
   const arr = [...array]
@@ -7,6 +7,30 @@ function shuffle(array) {
     ;[arr[i], arr[j]] = [arr[j], arr[i]]
   }
   return arr
+}
+
+
+function ordinalSuffix(number) {
+    const lastTwoDigit = number % 100
+    const lastDigit = number % 10
+    
+    if (lastTwoDigit >= 11 && lastTwoDigit <= 13) {
+        return `${number}th`
+    }
+
+    if (lastDigit === 1) {
+        return `${number}st`
+    }
+
+    if (lastDigit === 2) {
+        return `${number}nd`
+    }
+    
+    if (lastDigit === 3) {
+        return `${number}rd`
+    }
+
+    return `${number}th`
 }
 
 const statNames = {
@@ -48,4 +72,44 @@ function statLeaderQuestion(season, stat_type) {
 
 }
 
-export { statLeaderQuestion }
+
+function standingsQuestion(season, groupType, groupValue, rank) {
+    const question = `Which team finished ${ordinalSuffix(rank)} in the ${groupType} ${groupValue} in the ${season} season?`
+
+    let maxRank
+    if (groupType ===  'conference') {
+        maxRank = 15
+    } else {
+        maxRank = 5
+    }
+    const allRanks = Array.from({ length: maxRank }, (value, index) => index+1)
+    const filteredRanks = allRanks.filter((r) => r !== rank)
+    const shuffledRanks = shuffle(filteredRanks)
+    const distractors = shuffledRanks.slice(0, 3)
+    const finalRanks = [rank, ...distractors]
+
+    const standings = finalRanks.map(rank => getStandingByRank(season, groupType, groupValue, rank))
+    const indexedAnswers = standings.map((standing, index) => {
+    return {
+        name: `${standing.team.full_name}`,
+        isCorrect: index === 0
+        }
+    })
+
+    const shuffledAnswers = shuffle(indexedAnswers)
+    const options = shuffledAnswers.map(answer => answer.name)
+    const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+
+
+    return {
+        category: 'Standings',
+        question: question,
+        options: options,
+        answer_index: answerIndex,
+        author: 'ai',
+        status: 'pending'
+    }
+}
+
+
+export { statLeaderQuestion, standingsQuestion }
