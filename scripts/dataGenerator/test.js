@@ -1,6 +1,6 @@
-import { standingsQuestion, statLeaderQuestion } from "./templates/scoring.js";
-import { getLeaderByRank, getStandingByRank } from "./processor.js";
-import { fetchLeaders, fetchStandings} from './fetcher.js'
+import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator } from "./templates/questionGenerators.js";
+import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick } from "./processor.js";
+import { fetchLeaders, fetchStandings, fetchAllPlayers } from './fetcher.js'
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
 
 
@@ -27,10 +27,15 @@ try {
 }
 */
 
+
+console.log(draftQuestionGenerator(2003, 8))
+
+
+/*
 await fetchLeaders(2018, 'pts')
 await fetchStandings(2018)
 await fetchStandings(2022)
 console.log(standingsQuestion(2022, "conference", "West", 4))
 console.log(standingsQuestion(2018, "conference", "East", 1))
-
+*/
 

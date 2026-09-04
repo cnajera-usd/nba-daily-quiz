@@ -35,4 +35,28 @@ function getStandingByRank(season, groupType, groupValue, rank) {
     return standing
 }
 
-export { getLeaderByRank, getStandingByRank }
+
+
+function getPlayerByDraftPick(year, pick) {
+    const path = `scripts/dataGenerator/cache/players.json`
+
+    if (!fs.existsSync(path)) {
+        throw new Error("No player cache found. Run fetchAllPlayers() first.")
+    }
+
+    const raw = fs.readFileSync(path)
+    const data = JSON.parse(raw)
+
+    const player = data.find(entry =>
+        entry.draft_number === pick &&
+        entry.draft_year === year
+    )
+
+    return player
+}
+
+
+
+
+
+export { getLeaderByRank, getStandingByRank, getPlayerByDraftPick }

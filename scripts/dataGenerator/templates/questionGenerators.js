@@ -1,4 +1,4 @@
-import { getLeaderByRank, getStandingByRank } from "../processor.js";
+import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick } from "../processor.js";
 
 function shuffle(array) {
   const arr = [...array]
@@ -72,7 +72,6 @@ function statLeaderQuestion(season, stat_type) {
 
 }
 
-
 function standingsQuestion(season, groupType, groupValue, rank) {
     const question = `Which team finished ${ordinalSuffix(rank)} in the ${groupType} ${groupValue} in the ${season} season?`
 
@@ -112,4 +111,38 @@ function standingsQuestion(season, groupType, groupValue, rank) {
 }
 
 
-export { statLeaderQuestion, standingsQuestion }
+function draftQuestionGenerator(year, pick) {
+    const question = `Who was the ${ordinalSuffix(pick)} pick in the ${year} NBA Draft?`
+
+    const picks = Array.from({ length: 60 }, (value, index) => index + 1)
+    const otherPicks = picks.filter((p) => p !== pick)
+    const shuffledPicks = shuffle(otherPicks)
+    const distractors = shuffledPicks.slice(0, 3)
+    const finalPicks = [pick, ...distractors]
+
+    const players = finalPicks.map(pick => getPlayerByDraftPick(year, pick))
+    const indexedAnswers = players.map((player, index) => {
+        return {
+            name: `${player.first_name} ${player.last_name}`,
+            isCorrect: index === 0
+        }
+    })
+
+    const shuffledAnswers = shuffle(indexedAnswers)
+    const options = shuffledAnswers.map(answer => answer.name)
+    const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+
+    return {
+
+        category: 'Draft',
+        question: question,
+        options: options,
+        answer_index: answerIndex,
+        author: 'ai',
+        status: 'pending'
+    }
+}
+
+
+
+export { statLeaderQuestion, standingsQuestion, draftQuestionGenerator }
