@@ -28,7 +28,6 @@ try {
 */
 
 
-console.log(draftQuestionGenerator(2003, 8))
 
 
 /*
@@ -39,3 +38,22 @@ console.log(standingsQuestion(2022, "conference", "West", 4))
 console.log(standingsQuestion(2018, "conference", "East", 1))
 */
 
+
+
+/*
+const response = await fetch(
+  `https://api.balldontlie.io/v1/players?search=duncan`,
+  { headers: { 'Authorization': process.env.BALLDONTLIE_API_KEY } }
+)
+const data = await response.json()
+console.log(data.data)
+*/
+
+
+const response = await fetch(
+  `https://api.balldontlie.io/v1/contracts/players?player_id=1089`,
+  { headers: { 'Authorization': process.env.BALLDONTLIE_API_KEY } }
+)
+const data = await response.json()
+console.log(data.data)
+console.log(data.meta)
