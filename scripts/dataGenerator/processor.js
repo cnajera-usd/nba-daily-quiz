@@ -56,7 +56,24 @@ function getPlayerByDraftPick(year, pick) {
 }
 
 
+function getTopContractsByTeam(team_id, season) {
+    const path = `scripts/dataGenerator/cache/contracts_${team_id}_${season}.json`
+
+    if (!fs.existsSync(path)) {
+        throw new Error("No contracts cache found. Run fetchTeamContracts() first.")
+    }
+
+    const raw = fs.readFileSync(path)
+    const data = JSON.parse(raw)
+
+    data.sort((a, b) => b.cap_hit - a.cap_hit)
+    const topContracts = data.slice(0, 6)
+
+
+    return topContracts
+}
 
 
 
-export { getLeaderByRank, getStandingByRank, getPlayerByDraftPick }
+
+export { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam }

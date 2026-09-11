@@ -1,4 +1,4 @@
-import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick } from "../processor.js";
+import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "../processor.js";
 
 function shuffle(array) {
   const arr = [...array]
@@ -8,6 +8,17 @@ function shuffle(array) {
   }
   return arr
 }
+
+
+function finalizeAnswers(indexedAnswers) {
+    const shuffledAnswers = shuffle(indexedAnswers)
+    const options = shuffledAnswers.map(answer => answer.name)
+    const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+    
+    return { options, answerIndex }
+}
+
+
 
 
 function ordinalSuffix(number) {
@@ -65,8 +76,8 @@ function statLeaderQuestion(season, stat_type) {
     question: question,
     options: options,
     answer_index: answerIndex,
-    author: 'ai',
-    status: 'pending'
+    author: 'coder',
+    status: 'approved'
 
    }
 
@@ -105,8 +116,8 @@ function standingsQuestion(season, groupType, groupValue, rank) {
         question: question,
         options: options,
         answer_index: answerIndex,
-        author: 'ai',
-        status: 'pending'
+        author: 'coder',
+        status: 'approved'
     }
 }
 
@@ -138,11 +149,41 @@ function draftQuestionGenerator(year, pick) {
         question: question,
         options: options,
         answer_index: answerIndex,
-        author: 'ai',
-        status: 'pending'
+        author: 'coder',
+        status: 'approved'
     }
 }
 
+function contractQuestionGenerator(team_id, season) {
+    const topContracts = getTopContractsByTeam(team_id, season)
+    const shuffledContracts = shuffle(topContracts)
+    const correctContract = shuffledContracts[0]
+    const distractorContracts = shuffledContracts.slice(1, 4)
+    const finalContracts = [correctContract, ...distractorContracts]
+
+    const indexedAnswers = finalContracts.map((contract, index) => {
+        return {
+            name: `${contract.player.first_name} ${contract.player.last_name}`,
+            isCorrect: index === 0
+        }
+    })
+
+    const question = `Which player made $${correctContract.cap_hit.toLocaleString()} in the ${season} season for the ${correctContract.team.full_name}?`
+    const shuffledAnswers = finalizeAnswers(indexedAnswers)
+    
+    return {
+        category: 'Contracts',
+        question: question,
+        options: shuffledAnswers.options,
+        answer_index: shuffledAnswers.answerIndex,
+        status: 'approved',
+        author: 'coder'
+
+    }
+}
+
+    
 
 
-export { statLeaderQuestion, standingsQuestion, draftQuestionGenerator }
+
+export { statLeaderQuestion, standingsQuestion, draftQuestionGenerator, contractQuestionGenerator }

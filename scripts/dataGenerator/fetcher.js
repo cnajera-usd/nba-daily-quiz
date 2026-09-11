@@ -72,17 +72,15 @@ async function fetchStandings(season) {
 }
 
 
-async function fetchTeamContracts(season, team_id) {
+async function fetchTeamContracts(team_id, season) {
     fs.mkdirSync('scripts/dataGenerator/cache', { recursive: true})
-    const data = await bdlFetch(`/contracts/teams?season=${season}&team_id=${team_id}`) 
+    const data = await bdlFetch(`/contracts/teams?team_id=${team_id}&season=${season}`) 
     const contracts = data.data
 
-    fs.writeFileSync(`scripts/dataGenerator/cache/contracts-${season}-${team_id}.json`, JSON.stringify(contracts))
+    fs.writeFileSync(`scripts/dataGenerator/cache/contracts_${team_id}_${season}.json`, JSON.stringify(contracts))
     console.log(`Done! Fetched ${contracts.length} contracts for team ${team_id} in ${season}`)
 
     return contracts
-
-
 
 }
 
