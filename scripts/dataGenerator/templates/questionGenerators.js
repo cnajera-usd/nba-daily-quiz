@@ -9,7 +9,6 @@ function shuffle(array) {
   return arr
 }
 
-
 function finalizeAnswers(indexedAnswers) {
     const shuffledAnswers = shuffle(indexedAnswers)
     const options = shuffledAnswers.map(answer => answer.name)
@@ -17,9 +16,6 @@ function finalizeAnswers(indexedAnswers) {
     
     return { options, answerIndex }
 }
-
-
-
 
 function ordinalSuffix(number) {
     const lastTwoDigit = number % 100
@@ -66,16 +62,14 @@ function statLeaderQuestion(season, stat_type) {
         }
     })
 
-    const shuffledAnswers = shuffle(indexedAnswers)
-    const options = shuffledAnswers.map(answer => answer.name)
-    const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+    const shuffledAnswers = finalizeAnswers(indexedAnswers)
 
 
    return {
     category: 'Stats',
     question: question,
-    options: options,
-    answer_index: answerIndex,
+    options: shuffledAnswers.options,
+    answer_index: shuffledAnswers.answerIndex,
     author: 'coder',
     status: 'approved'
 
@@ -106,16 +100,14 @@ function standingsQuestion(season, groupType, groupValue, rank) {
         }
     })
 
-    const shuffledAnswers = shuffle(indexedAnswers)
-    const options = shuffledAnswers.map(answer => answer.name)
-    const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+    const shuffledAnswers = finalizeAnswers(indexedAnswers)
 
 
     return {
         category: 'Standings',
         question: question,
-        options: options,
-        answer_index: answerIndex,
+        options: shuffledAnswers.options,
+        answer_index: shuffledAnswers.answerIndex,
         author: 'coder',
         status: 'approved'
     }
@@ -139,16 +131,14 @@ function draftQuestionGenerator(year, pick) {
         }
     })
 
-    const shuffledAnswers = shuffle(indexedAnswers)
-    const options = shuffledAnswers.map(answer => answer.name)
-    const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+    const shuffledAnswers = finalizeAnswers(indexedAnswers)
 
     return {
 
         category: 'Draft',
         question: question,
-        options: options,
-        answer_index: answerIndex,
+        options: shuffledAnswers.options,
+        answer_index: shuffledAnswers.answerIndex,
         author: 'coder',
         status: 'approved'
     }
