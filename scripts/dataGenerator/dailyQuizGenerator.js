@@ -28,6 +28,20 @@ function tierPicker() {
     }
 }
 
+function pickSeasonFromTier(tier, tiers) {
+    let start, end
+    if (tier === "recent") {
+        start = tiers.midToRecent
+        end = tiers.max
+    } else if (tier === "mid") {
+        start = tiers.oldToMid
+        end = tiers.midToRecent - 1
+    } else if (tier === "old") {
+        start = tiers.min
+        end = tiers.oldToMid - 1
+    }
+    return Math.floor(Math.random() * (end - start + 1)) + start
+}
 
 
-export { ensuredCache, tierPicker }
+export { ensuredCache, tierPicker, pickSeasonFromTier, statLeaderTiers, standingsTiers, draftTiers }
