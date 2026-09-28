@@ -1,7 +1,12 @@
 import fs from 'fs';
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
+import { contractQuestionGenerator } from "./templates/questionGenerators.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 
+
+function randomInRange(start, end) {
+    return Math.floor(Math.random() * (end - start + 1)) + start
+}
 
 async function ensuredCache(path, fetchFn) {
     if (!fs.existsSync(path)) {
@@ -16,6 +21,8 @@ async function ensuredCache(path, fetchFn) {
 const statLeaderTiers = { min: 1951, oldToMid: 1980, midToRecent: 2005, max: 2025 }
 const standingsTiers = { min: 1970, oldToMid: 1985, midToRecent: 2001, max: 2025 }
 const draftTiers = { min: 1950, oldToMid: 1980, midToRecent: 2001, max: 2025 }
+const teamId = randomInRange(1, 30)
+const contractSeason = randomInRange(2011, 2025)
 
 function tierPicker() { 
     const chosenTier = Math.floor(Math.random() * 10)
@@ -40,8 +47,19 @@ function pickSeasonFromTier(tier, tiers) {
         start = tiers.min
         end = tiers.oldToMid - 1
     }
-    return Math.floor(Math.random() * (end - start + 1)) + start
+    return randomInRange(start, end)
 }
 
 
-export { ensuredCache, tierPicker, pickSeasonFromTier, statLeaderTiers, standingsTiers, draftTiers }
+async function randomContractQuestionGenerator() {
+    const teamId = randomInRange(1, 30)
+    const contractSeason = randomInRange(2011, 2025)
+
+    const path = `scripts/dataGenerator/cache/contracts_${teamId}_${contractSeason}.json`
+    await ensuredCache(path, () => fetchTeamContracts(teamId, contractSeason))
+
+    return contractQuestionGenerator(teamId, contractSeason)
+}
+
+
+export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomInRange, statLeaderTiers, standingsTiers, draftTiers }
