@@ -116,13 +116,26 @@ function standingsQuestion(season, groupType, groupValue, rank) {
 
 function draftQuestionGenerator(year, pick) {
     const question = `Who was the ${ordinalSuffix(pick)} pick in the ${year} NBA Draft?`
-
     const picks = Array.from({ length: 60 }, (value, index) => index + 1)
     const otherPicks = picks.filter((p) => p !== pick)
     const shuffledPicks = shuffle(otherPicks)
-    const distractors = shuffledPicks.slice(0, 3)
-    const finalPicks = [pick, ...distractors]
 
+
+    const distractors = []
+    for (let i = 0; i < shuffledPicks.length; i++) {
+        if (distractors.length === 3) {
+            break
+    }
+
+    const candidatePick = shuffledPicks[i]
+    const player = getPlayerByDraftPick(year, candidatePick)
+
+    if (player) {
+        distractors.push(candidatePick)
+        }
+    }
+
+    const finalPicks = [pick, ...distractors]
     const players = finalPicks.map(pick => getPlayerByDraftPick(year, pick))
     const indexedAnswers = players.map((player, index) => {
         return {
