@@ -73,7 +73,20 @@ function getTopContractsByTeam(team_id, season) {
     return topContracts
 }
 
+function getMaxRankForGroup(season, groupType, groupValue) {
+    const path = `scripts/dataGenerator/cache/standings_${season}.json`
 
+    if (!fs.existsSync(path)) {
+        throw new Error(`No caches standings for season ${season}`)
+    }
 
+    const raw = fs.readFileSync(path)
+    const data = JSON.parse(raw)
 
-export { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam }
+    const filteredData = data.filter(entry => entry.season === season && entry.team[groupType] === groupValue)
+
+    return filteredData.length
+
+}
+
+export { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam, getMaxRankForGroup }

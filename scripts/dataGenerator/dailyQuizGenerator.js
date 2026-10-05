@@ -1,11 +1,21 @@
 import fs from 'fs';
-import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
-import { contractQuestionGenerator, draftQuestionGenerator } from "./templates/questionGenerators.js";
+import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam, getMaxRankForGroup } from "./processor.js";
+import { contractQuestionGenerator, draftQuestionGenerator, statLeaderQuestion, standingsQuestion } from "./templates/questionGenerators.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
+import { loadESLint } from 'eslint';
 
 
 function randomInRange(start, end) {
     return Math.floor(Math.random() * (end - start + 1)) + start
+}
+
+const statTypeAvailability = {
+    pts: 1951,
+    reb: 1951,
+    ast: 1951,
+    stl: 1974,
+    blk: 1974,
+    tov: 1978
 }
 
 async function ensuredCache(path, fetchFn) {
@@ -83,4 +93,79 @@ async function randomDraftQuestionGenerator() {
     
 }
 
-export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomDraftQuestionGenerator, randomInRange, statLeaderTiers, standingsTiers, draftTiers }
+
+
+function getValidStatTypes(season) {
+    const allStatTypes = Object.keys(statTypeAvailability)
+    const validStatTypes = allStatTypes.filter((key) => season >= statTypeAvailability[key])
+    return validStatTypes
+
+}
+
+async function randomStatLeaderQuestionGenerator() {
+    const season = pickSeasonFromTier(tierPicker(), statLeaderTiers)
+    const validStatTypes = getValidStatTypes(season)
+    const validStatType = validStatTypes[Math.floor(Math.random() * validStatTypes.length)]
+
+    const path = `scripts/dataGenerator/cache/leaders_${season}_${validStatType}.json`
+    await ensuredCache(path, () => fetchLeaders(season, validStatType))
+
+    return statLeaderQuestion(season, validStatType)
+
+
+
+}
+
+
+async function randomStandingsQuestionGenerator() {
+    let season = pickSeasonFromTier(tierPicker(), standingsTiers)
+    let attempts = 0
+    while ((season === 2011 || season === 2020) && attempts < 10) {
+        season = pickSeasonFromTier(tierPicker(), standingsTiers)
+        attempts++
+
+    }
+
+    const path = `scripts/dataGenerator/cache/standings_${season}.json`
+    await ensuredCache(path, () => fetchStandings(season))
+
+    let groupType
+    if (season < 2004) {
+        groupType = 'conference'
+    } else {
+        const typeOptions = ['conference', 'division']
+        groupType = typeOptions[Math.floor(Math.random() * typeOptions.length)]
+    }
+
+    let groupValue
+    if (groupType === 'conference') {
+        const conferenceOptions = ['East', 'West']
+        groupValue = conferenceOptions[Math.floor(Math.random() * conferenceOptions.length)]
+    } else {
+        const divisionOptions = ['Atlantic', 'Central', 'Southeast', 'Northwest', 'Pacific', 'Southwest']
+        groupValue = divisionOptions[Math.floor(Math.random() * divisionOptions.length)]
+    }
+
+    
+    const maxRank = getMaxRankForGroup(season, groupType, groupValue)
+    let rank = randomInRange(1, maxRank)
+    let standing = getStandingByRank(season, groupType, groupValue, rank)
+    let attempts2 = 0
+    while (!standing && attempts2 < 50) {
+        rank = randomInRange(1, maxRank)
+        standing = getStandingByRank(season, groupType, groupValue, rank)
+        attempts2++
+
+    }
+    console.log(`Generating standings question for season ${season}, groupType ${groupType}, groupValue ${groupValue}, rank ${rank}`)
+
+
+    return standingsQuestion(season, groupType, groupValue, rank)
+
+}
+
+
+
+
+
+export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, randomInRange, getValidStatTypes, statLeaderTiers, standingsTiers, draftTiers }

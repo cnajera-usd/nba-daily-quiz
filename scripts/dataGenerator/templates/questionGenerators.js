@@ -1,4 +1,5 @@
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "../processor.js";
+import { getMaxRankForGroup } from "../processor.js";
 
 function shuffle(array) {
   const arr = [...array]
@@ -78,18 +79,41 @@ function statLeaderQuestion(season, stat_type) {
 }
 
 function standingsQuestion(season, groupType, groupValue, rank) {
-    const question = `Which team finished ${ordinalSuffix(rank)} in the ${groupType} ${groupValue} in the ${season} season?`
 
-    let maxRank
-    if (groupType ===  'conference') {
-        maxRank = 15
-    } else {
-        maxRank = 5
+    const conferenceNames = {
+        'East': 'Eastern Conference',
+        'West': 'Western Conference'
     }
+
+    let groupLabel
+    if (groupType === 'conference') {
+        groupLabel = conferenceNames[groupValue]
+    } else if (groupType === 'division') {
+        groupLabel = `${groupValue} Division`
+    }
+
+    const question = `Which team finished ${ordinalSuffix(rank)} in the ${groupLabel} in the ${season} season?`
+
+    const maxRank = getMaxRankForGroup(season, groupType, groupValue)
     const allRanks = Array.from({ length: maxRank }, (value, index) => index+1)
     const filteredRanks = allRanks.filter((r) => r !== rank)
     const shuffledRanks = shuffle(filteredRanks)
-    const distractors = shuffledRanks.slice(0, 3)
+
+    const distractors = []
+    for (let i = 0; i < shuffledRanks.length; i++) {
+        if (distractors.length === 3) {
+            break
+        }
+    
+
+        const candidateRank = shuffledRanks[i]
+        const standing = getStandingByRank(season, groupType, groupValue, candidateRank)
+    
+        if (standing) {
+            distractors.push(candidateRank)
+        }
+    }
+
     const finalRanks = [rank, ...distractors]
 
     const standings = finalRanks.map(rank => getStandingByRank(season, groupType, groupValue, rank))
