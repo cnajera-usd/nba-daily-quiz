@@ -29,7 +29,7 @@ async function ensuredCache(path, fetchFn) {
 
 
 const statLeaderTiers = { min: 1951, oldToMid: 1980, midToRecent: 2005, max: 2025 }
-const standingsTiers = { min: 1970, oldToMid: 1985, midToRecent: 2001, max: 2025 }
+const standingsTiers = { min: 2004, oldToMid: 2011, midToRecent: 2018, max: 2025 }
 const draftTiers = { min: 1950, oldToMid: 1980, midToRecent: 2001, max: 2025 }
 
 function tierPicker() { 
@@ -157,15 +157,37 @@ async function randomStandingsQuestionGenerator() {
         attempts2++
 
     }
-    console.log(`Generating standings question for season ${season}, groupType ${groupType}, groupValue ${groupValue}, rank ${rank}`)
-
-
     return standingsQuestion(season, groupType, groupValue, rank)
+}
 
+
+const generators = [randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator]
+
+async function generateDailyQuiz() {
+
+    const questions = []
+
+    for (let i = 0; i < generators.length; i++) {
+        
+        for (let j = 0; j < 2; j++) {
+            const question = await generators[i]()
+            questions.push(question)
+        }
+
+    }
+
+    for (let i = 0; i < 2; i++) {
+        const randomGeneratorIndex = Math.floor(Math.random() * generators.length)
+        const question = await generators[randomGeneratorIndex]()
+        questions.push(question)
+    }
+
+    return questions
 }
 
 
 
 
 
-export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, randomInRange, getValidStatTypes, statLeaderTiers, standingsTiers, draftTiers }
+
+export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, randomInRange, getValidStatTypes, generateDailyQuiz, statLeaderTiers, standingsTiers, draftTiers }
