@@ -53,8 +53,24 @@ const statNames = {
 function statLeaderQuestion(season, stat_type) {
    const question = `Who led the NBA in ${statNames[stat_type]} in the ${season} season?`
 
-    const ranks = [1, 2, 3, 4]
-    const leaders = ranks.map(rank => getLeaderByRank(season, stat_type, rank))
+    const distractors = []
+    for (let candidateRank = 2; candidateRank <= 10; candidateRank++) {
+        if (distractors.length === 3) {
+            break
+        }
+    
+
+        const leader= getLeaderByRank(season, stat_type, candidateRank)
+    
+        if (leader) {
+            distractors.push(candidateRank)
+        }
+    }
+
+    const finalRanks = [1, ...distractors]
+
+
+    const leaders = finalRanks.map(rank => getLeaderByRank(season, stat_type, rank))
 
     const indexedAnswers = leaders.map((leader, index) => {
     return {

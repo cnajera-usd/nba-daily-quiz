@@ -163,14 +163,32 @@ async function randomStandingsQuestionGenerator() {
 
 const generators = [randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator]
 
+
+
+async function generateUniqueQuestion(generator, questions) {
+    
+    
+    for (let i = 0; i < 10; i++) {
+        try {
+            const question = await generator()
+            const isDuplicate = questions.some(q => q.question === question.question)
+            if (!isDuplicate) {
+                return question
+            }
+        } catch (error) {
+            console.error('Error generating unique question:', error)
+        }
+    }
+
+    throw new Error('10 attempts made to generate a unique question, but all 10 failed.')
+}
+
 async function generateDailyQuiz() {
 
     const questions = []
-
     for (let i = 0; i < generators.length; i++) {
-        
         for (let j = 0; j < 2; j++) {
-            const question = await generators[i]()
+            const question = await generateUniqueQuestion(generators[i], questions)
             questions.push(question)
         }
 
@@ -178,7 +196,7 @@ async function generateDailyQuiz() {
 
     for (let i = 0; i < 2; i++) {
         const randomGeneratorIndex = Math.floor(Math.random() * generators.length)
-        const question = await generators[randomGeneratorIndex]()
+        const question = await generateUniqueQuestion(generators[randomGeneratorIndex], questions)
         questions.push(question)
     }
 
@@ -190,4 +208,4 @@ async function generateDailyQuiz() {
 
 
 
-export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, randomInRange, getValidStatTypes, generateDailyQuiz, statLeaderTiers, standingsTiers, draftTiers }
+export { ensuredCache, tierPicker, pickSeasonFromTier, randomContractQuestionGenerator, randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, randomInRange, getValidStatTypes, generateDailyQuiz, generateUniqueQuestion, statLeaderTiers, standingsTiers, draftTiers }
