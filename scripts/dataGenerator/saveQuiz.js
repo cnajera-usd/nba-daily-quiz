@@ -26,3 +26,23 @@ export async function saveQuizToSupabase(quiz, date) {
 
 
 }
+
+
+export async function getRecentQuestions() {
+    const cutoff = new Date()
+    cutoff.setDate(cutoff.getDate() - 30)
+    const cutoffString = cutoff.toISOString().split('T')[0] // Format as YYYY-MM-DD
+
+
+    const query  = supabase.from('daily_quizzes').select('date, questions(question)').gte('date', cutoffString)
+    const { data, error } = await query
+    if (error) {
+        throw error
+    }
+    const recentQuestions = data.map(entry => entry.questions.question)
+
+    return recentQuestions
+
+
+
+}

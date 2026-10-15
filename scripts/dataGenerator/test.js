@@ -2,7 +2,7 @@ import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contract
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 import { supabase } from './supabaseClient.js'
-import { saveQuizToSupabase } from './saveQuiz.js'
+import { saveQuizToSupabase, getRecentQuestions } from './saveQuiz.js'
 import { ensuredCache, tierPicker, pickSeasonFromTier, standingsTiers, randomContractQuestionGenerator, randomInRange,randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, statLeaderTiers, generateDailyQuiz, generateUniqueQuestion } from './dailyQuizGenerator.js'
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
 
@@ -80,4 +80,31 @@ console.log('Insert error:', insertError)
 */
 
 
-await saveQuizToSupabase(await generateDailyQuiz(), "2026-01-14")
+//await saveQuizToSupabase(await generateDailyQuiz(), "2026-01-14")
+
+// running query on daily_quizzes 
+/*const cutoff = new Date()
+cutoff.setDate(cutoff.getDate() - 30)
+const cutoffString = cutoff.toISOString().split('T')[0] // Format as YYYY-MM-DD
+
+
+const query  = supabase.from('daily_quizzes').select('date, questions(question)').gte('date', cutoffString)
+const { data } = await query
+const recentQuestions = data.map(entry => entry.questions.question)
+console.log(recentQuestions)
+
+*/
+
+const fakeGenerator = () => ({ question: 'Test question' })
+
+// Case 1: the question is in the recent list, so every attempt should be rejected
+try {
+    await generateUniqueQuestion(fakeGenerator, [], ['Test question'])
+    console.log('FAIL: should have thrown')
+} catch (error) {
+    console.log('PASS: rejected as expected ->', error.message)
+}
+
+// Case 2: nothing recent, so the question should come back right away
+const result = await generateUniqueQuestion(fakeGenerator, [], [])
+console.log('PASS if you see the question:', result)

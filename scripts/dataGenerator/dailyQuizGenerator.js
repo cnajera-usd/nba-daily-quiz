@@ -165,13 +165,13 @@ const generators = [randomContractQuestionGenerator, randomStandingsQuestionGene
 
 
 
-async function generateUniqueQuestion(generator, questions) {
+async function generateUniqueQuestion(generator, questions, recentQuestions) {
     
     
     for (let i = 0; i < 10; i++) {
         try {
             const question = await generator()
-            const isDuplicate = questions.some(q => q.question === question.question)
+            const isDuplicate = questions.some(q => q.question === question.question) || recentQuestions.includes(question.question)
             if (!isDuplicate) {
                 return question
             }
@@ -183,12 +183,12 @@ async function generateUniqueQuestion(generator, questions) {
     throw new Error('10 attempts made to generate a unique question, but all 10 failed.')
 }
 
-async function generateDailyQuiz() {
+async function generateDailyQuiz(recentQuestions) {
 
     const questions = []
     for (let i = 0; i < generators.length; i++) {
         for (let j = 0; j < 2; j++) {
-            const question = await generateUniqueQuestion(generators[i], questions)
+            const question = await generateUniqueQuestion(generators[i], questions, recentQuestions)
             questions.push(question)
         }
 
@@ -196,7 +196,7 @@ async function generateDailyQuiz() {
 
     for (let i = 0; i < 2; i++) {
         const randomGeneratorIndex = Math.floor(Math.random() * generators.length)
-        const question = await generateUniqueQuestion(generators[randomGeneratorIndex], questions)
+        const question = await generateUniqueQuestion(generators[randomGeneratorIndex], questions, recentQuestions)
         questions.push(question)
     }
 
