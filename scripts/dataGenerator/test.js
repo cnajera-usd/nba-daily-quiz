@@ -2,6 +2,7 @@ import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contract
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 import { supabase } from './supabaseClient.js'
+import { saveQuizToSupabase } from './saveQuiz.js'
 import { ensuredCache, tierPicker, pickSeasonFromTier, standingsTiers, randomContractQuestionGenerator, randomInRange,randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, statLeaderTiers, generateDailyQuiz, generateUniqueQuestion } from './dailyQuizGenerator.js'
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
 
@@ -63,8 +64,9 @@ const { data, error } = await supabase.from('questions').insert(pendingQuiz).sel
 console.log(data, error)
 */
 
+/*
 const { data, error } = await supabase.from('questions').select()
-const result = data.map((question, index) => ({
+export const result = data.map((question, index) => ({
 
   question_id: question.id,
   position: index + 1,
@@ -75,3 +77,7 @@ console.log(result)
 
 const { error: insertError } = await supabase.from('daily_quizzes').insert(result)
 console.log('Insert error:', insertError)
+*/
+
+
+await saveQuizToSupabase(await generateDailyQuiz(), "2026-01-14")
