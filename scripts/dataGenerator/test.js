@@ -2,7 +2,7 @@ import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contract
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 import { supabase } from './supabaseClient.js'
-import { saveQuizToSupabase, getRecentQuestions, getTomorrowPacific } from './saveQuiz.js'
+import { saveQuizToSupabase, getRecentQuestions, getTomorrowPacific, quizExistsForDate } from './saveQuiz.js'
 import { ensuredCache, tierPicker, pickSeasonFromTier, standingsTiers, randomContractQuestionGenerator, randomInRange,randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, statLeaderTiers, generateDailyQuiz, generateUniqueQuestion } from './dailyQuizGenerator.js'
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
 
@@ -128,4 +128,3 @@ console.log('done')
 */
 
 
-console.log(await randomStatLeaderQuestionGenerator())

@@ -1,21 +1,28 @@
 import { generateDailyQuiz } from "./dailyQuizGenerator.js";
-import { saveQuizToSupabase, getRecentQuestions, getTomorrowPacific } from "./saveQuiz.js";
+import { saveQuizToSupabase, getRecentQuestions, getTomorrowPacific, quizExistsForDate } from "./saveQuiz.js";
+
 
 
 async function runDailyQuiz() {
     
-    try {
-        const dateTomorrow = getTomorrowPacific()
-        const recentQuestions = await getRecentQuestions()
-        const createNewQuiz = await generateDailyQuiz(recentQuestions)
-        await saveQuizToSupabase(createNewQuiz, dateTomorrow)
-        console.log('Saved quiz for', dateTomorrow)
+        try {
+            const dateTomorrow = getTomorrowPacific()
+            const checkForQuiz = await quizExistsForDate(dateTomorrow)
+        if (checkForQuiz) {
+            console.log("Quiz already exists for", dateTomorrow)
+        } else {
+
+            const recentQuestions = await getRecentQuestions()
+            const createNewQuiz = await generateDailyQuiz(recentQuestions)
+            await saveQuizToSupabase(createNewQuiz, dateTomorrow)
+            console.log('Saved quiz for', dateTomorrow)
+        }
+
+
     } catch (error) {
         console.error("Error: ran into problem", error)
         process.exit(1)
-    }
-
-
+        }
 
 }
 

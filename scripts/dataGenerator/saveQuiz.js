@@ -1,6 +1,19 @@
 import { supabase } from './supabaseClient.js'
 
 
+
+export async function quizExistsForDate(date) {
+    const query = supabase.from('daily_quizzes').select('date').eq('date', date)
+    const { data, error } = await query
+    if (error) {
+        throw error
+    }
+
+    return data.length > 0
+
+
+}
+
 export async function saveQuizToSupabase(quiz, date) {
 
     const pendingQuiz = quiz.map(q => ({...q, status: 'pending' }))
