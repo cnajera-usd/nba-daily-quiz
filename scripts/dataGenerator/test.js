@@ -128,4 +128,4 @@ console.log('done')
 */
 
 
-console.log(await randomDraftQuestionGenerator())
+console.log(await randomStatLeaderQuestionGenerator())

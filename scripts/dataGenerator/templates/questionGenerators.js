@@ -77,7 +77,7 @@ function statLeaderQuestion(season, stat_type) {
     return {
         name: `${leader.player.first_name} ${leader.player.last_name}`,
         isCorrect: index === 0,
-        detail: `${leader.value}`
+        detail: `${leader.value.toFixed(1)}`
         }
     })
 
