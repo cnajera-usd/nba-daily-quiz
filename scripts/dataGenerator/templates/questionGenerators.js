@@ -14,8 +14,9 @@ function finalizeAnswers(indexedAnswers) {
     const shuffledAnswers = shuffle(indexedAnswers)
     const options = shuffledAnswers.map(answer => answer.name)
     const answerIndex = shuffledAnswers.findIndex(answer => answer.isCorrect)
+    const optionsDetails = shuffledAnswers.map(answer => answer.detail)
     
-    return { options, answerIndex }
+    return { options, answerIndex, optionsDetails }
 }
 
 function ordinalSuffix(number) {
@@ -75,7 +76,8 @@ function statLeaderQuestion(season, stat_type) {
     const indexedAnswers = leaders.map((leader, index) => {
     return {
         name: `${leader.player.first_name} ${leader.player.last_name}`,
-        isCorrect: index === 0
+        isCorrect: index === 0,
+        detail: `${leader.value}`
         }
     })
 
@@ -88,7 +90,8 @@ function statLeaderQuestion(season, stat_type) {
     options: shuffledAnswers.options,
     answer_index: shuffledAnswers.answerIndex,
     author: 'coder',
-    status: 'approved'
+    status: 'approved',
+    options_details: shuffledAnswers.optionsDetails
 
    }
 
@@ -136,7 +139,8 @@ function standingsQuestion(season, groupType, groupValue, rank) {
     const indexedAnswers = standings.map((standing, index) => {
     return {
         name: `${standing.team.full_name}`,
-        isCorrect: index === 0
+        isCorrect: index === 0,
+        detail: `${standing.wins}-${standing.losses}`
         }
     })
 
@@ -149,7 +153,8 @@ function standingsQuestion(season, groupType, groupValue, rank) {
         options: shuffledAnswers.options,
         answer_index: shuffledAnswers.answerIndex,
         author: 'coder',
-        status: 'approved'
+        status: 'approved',
+        options_details: shuffledAnswers.optionsDetails
     }
 }
 
@@ -201,17 +206,18 @@ function contractQuestionGenerator(team_id, season) {
     const topContracts = getTopContractsByTeam(team_id, season)
     const shuffledContracts = shuffle(topContracts)
     const correctContract = shuffledContracts[0]
-    const distractorContracts = shuffledContracts.slice(1, 4)
+    const distractorContracts = shuffledContracts.filter(contract => contract.cap_hit !== correctContract.cap_hit).slice(1, 4)
     const finalContracts = [correctContract, ...distractorContracts]
 
     const indexedAnswers = finalContracts.map((contract, index) => {
         return {
             name: `${contract.player.first_name} ${contract.player.last_name}`,
-            isCorrect: index === 0
+            isCorrect: index === 0,
+            detail: `$${contract.cap_hit.toLocaleString('en-US')}`
         }
     })
 
-    const question = `Which player made $${correctContract.cap_hit.toLocaleString()} in the ${season} season for the ${correctContract.team.full_name}?`
+    const question = `Which player made $${correctContract.cap_hit.toLocaleString('en-US')} in the ${season} season for the ${correctContract.team.full_name}?`
     const shuffledAnswers = finalizeAnswers(indexedAnswers)
     
     return {
@@ -220,7 +226,9 @@ function contractQuestionGenerator(team_id, season) {
         options: shuffledAnswers.options,
         answer_index: shuffledAnswers.answerIndex,
         status: 'approved',
-        author: 'coder'
+        author: 'coder',
+        options_details: shuffledAnswers.optionsDetails
+
 
     }
 }

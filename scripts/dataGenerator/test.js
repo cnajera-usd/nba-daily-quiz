@@ -113,4 +113,15 @@ console.log('PASS if you see the question:', result)
 */
 
 
-console.log(getTomorrowPacific())
+console.log('start')
+
+for (let i = 0; i < 50; i++) {
+    const result = await contractQuestionGenerator(26, 2016)
+    const correctDetail = result.options_details[result.answer_index]
+    const matches = result.options_details.filter(d => d === correctDetail).length
+    if (matches > 1) {
+        console.log('DUPLICATE', result)
+    }
+}
+
+console.log('done')
