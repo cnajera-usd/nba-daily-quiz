@@ -185,7 +185,8 @@ function draftQuestionGenerator(year, pick) {
     const indexedAnswers = players.map((player, index) => {
         return {
             name: `${player.first_name} ${player.last_name}`,
-            isCorrect: index === 0
+            isCorrect: index === 0,
+            detail: `Pick #${player.draft_number}`
         }
     })
 
@@ -198,7 +199,8 @@ function draftQuestionGenerator(year, pick) {
         options: shuffledAnswers.options,
         answer_index: shuffledAnswers.answerIndex,
         author: 'coder',
-        status: 'approved'
+        status: 'approved',
+        options_details: shuffledAnswers.optionsDetails
     }
 }
 

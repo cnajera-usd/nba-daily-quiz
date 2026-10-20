@@ -112,7 +112,7 @@ const result = await generateUniqueQuestion(fakeGenerator, [], [])
 console.log('PASS if you see the question:', result)
 */
 
-
+/*
 console.log('start')
 
 for (let i = 0; i < 50; i++) {
@@ -125,3 +125,7 @@ for (let i = 0; i < 50; i++) {
 }
 
 console.log('done')
+*/
+
+
+console.log(await randomDraftQuestionGenerator())
