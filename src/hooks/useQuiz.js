@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getDailyQuestions, getDailySeed } from '@/utils/dailySeed'
 import { questions as localQuestions } from '@/data/questions'
+import { getTodayPacific } from '../utils/pacificDate'
 import { supabase } from '@/lib/supabase'
 
 const STORAGE_KEY = 'nba-quiz-state'
@@ -20,16 +21,19 @@ export function useQuiz() {
   // Load questions (from Supabase if available, else local)
   useEffect(() => {
     async function loadQuestions() {
-      let pool = localQuestions
+      
 
       if (supabase) {
-        const { data, error } = await supabase.from('questions').select('*').eq('status', 'approved')
-        if (!error && data?.length) pool = data.map(q => ({ ...q, answerIndex: q.answer_index }))
-      }
+        const { data, error } = await supabase.from('daily_quizzes').select('position, questions(*)').eq('date', getTodayPacific()).order('position')
+        console.log(data, error)
+        const daily = data.map(row => ({...row.questions, answerIndex: row.questions.answer_index }))
+        setQuestions(daily)
 
-      const daily = getDailyQuestions(pool, 10)
-      setQuestions(daily)
+
+      }
       setLoading(false)
+
+    
     }
 
     // Restore saved state for today if it exists
