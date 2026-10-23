@@ -77,6 +77,11 @@ export default function Quiz() {
             >
               <span className={styles.optLetter}>{LETTERS[i]}</span>
               <span className={styles.optText}>{opt}</span>
+              {hasAnswered && currentQuestion.options_details?.[i] && (
+                <span className={styles.optDetails}>
+                  {currentQuestion.options_details?.[i]}
+                </span>
+              )}
               {hasAnswered && i === currentQuestion.answerIndex && (
                 <span className={styles.checkmark}>✓</span>
               )}
