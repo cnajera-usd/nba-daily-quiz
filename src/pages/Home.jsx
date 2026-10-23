@@ -1,12 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useStreak } from '@/hooks/useStreak'
 import { getQuizNumber } from '@/utils/dailySeed'
+import { getTodayPacific } from '../utils/pacificDate'
 import styles from './Home.module.css'
 
-function getTodayKey() {
-  const d = new Date()
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-}
 
 function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
@@ -17,14 +14,15 @@ export default function Home() {
   const { streak, bestStreak, totalPlayed, winPct } = useStreak()
 
   const saved = getSavedState()
-  const todayKey = getTodayKey()
+  const todayKey = getTodayPacific()
   const alreadyPlayed = saved?.dateKey === todayKey && saved?.status === 'finished'
   const inProgress = saved?.dateKey === todayKey && saved?.status === 'playing'
   const progressCount = saved?.dateKey === todayKey ? (saved?.answers?.length ?? 0) : 0
 
   const quizNumber = getQuizNumber()
   const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long', month: 'long', day: 'numeric',
+    weekday: 'long', month: 'long', day: 'numeric', timeZone:'America/Los_Angeles'
+
   })
 
   return (

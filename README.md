@@ -107,3 +107,5 @@ gets the same 10 questions, no server coordination required.
 - [ ] User auth + leaderboard
 - [ ] More question categories
 - [ ] Difficulty tiers
+
+

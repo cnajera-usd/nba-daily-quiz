@@ -6,11 +6,6 @@ import { supabase } from '@/lib/supabase'
 
 const STORAGE_KEY = 'nba-quiz-state'
 
-function getTodayKey() {
-  const d = new Date()
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-}
-
 export function useQuiz() {
   const [questions, setQuestions] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -25,7 +20,6 @@ export function useQuiz() {
 
       if (supabase) {
         const { data, error } = await supabase.from('daily_quizzes').select('position, questions(*)').eq('date', getTodayPacific()).order('position')
-        console.log(data, error)
         const daily = data.map(row => ({...row.questions, answerIndex: row.questions.answer_index }))
         setQuestions(daily)
 
@@ -41,7 +35,7 @@ export function useQuiz() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved)
-        if (parsed.dateKey === getTodayKey()) {
+        if (parsed.dateKey === getTodayPacific()) {
           setQuestions(parsed.questions)
           setCurrentIndex(parsed.currentIndex)
           setAnswers(parsed.answers)
@@ -50,7 +44,7 @@ export function useQuiz() {
           return
         }
       } catch (error) {
-        console.error(error)
+        console.error('Restore failed', error)
       }
     }
 
@@ -61,7 +55,7 @@ export function useQuiz() {
   useEffect(() => {
     if (!loading && questions.length) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        dateKey: getTodayKey(),
+        dateKey: getTodayPacific(),
         questions,
         currentIndex,
         answers,
