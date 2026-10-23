@@ -42,14 +42,16 @@ export function useQuiz() {
       try {
         const parsed = JSON.parse(saved)
         if (parsed.dateKey === getTodayKey()) {
-          setQuestions(remapped)
+          setQuestions(parsed.questions)
           setCurrentIndex(parsed.currentIndex)
           setAnswers(parsed.answers)
           setStatus(parsed.status)
           setLoading(false)
           return
         }
-      } catch (_) {}
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     loadQuestions()
