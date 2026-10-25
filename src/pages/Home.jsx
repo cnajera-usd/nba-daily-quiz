@@ -11,7 +11,7 @@ function getSavedState() {
 
 export default function Home() {
   const navigate = useNavigate()
-  const { streak, bestStreak, totalPlayed, winPct } = useStreak()
+  const { streak, bestStreak, totalPlayed, winPct, averageScore } = useStreak()
 
   const saved = getSavedState()
   const todayKey = getTodayPacific()
@@ -56,13 +56,13 @@ export default function Home() {
         </div>
         <div className={styles.divider} />
         <div className={styles.statCol}>
-          <div className={styles.statVal}>{winPct}%</div>
-          <div className={styles.statLabel}>Win %</div>
+          <div className={styles.statVal}>{averageScore}</div>
+          <div className={styles.statLabel}>Average Score</div>
         </div>
         <div className={styles.divider} />
         <div className={styles.statCol}>
           <div className={styles.statVal}>{bestStreak}</div>
-          <div className={styles.statLabel}>Best</div>
+          <div className={styles.statLabel}>Best Streak</div>
         </div>
       </div>
 

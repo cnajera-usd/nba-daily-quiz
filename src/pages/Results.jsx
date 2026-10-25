@@ -1,12 +1,9 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getTodayPacific } from '../utils/pacificDate'
 import { useStreak } from '@/hooks/useStreak'
 import styles from './Results.module.css'
 
-function getTodayKey() {
-  const d = new Date()
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-}
 
 function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
@@ -26,7 +23,7 @@ function buildShareText(answers, score, quizNum) {
 }
 
 function getNextQuizCountdown() {
-  const now = new Date()
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
   const tomorrow = new Date(now)
   tomorrow.setDate(tomorrow.getDate() + 1)
   tomorrow.setHours(0, 0, 0, 0)
@@ -41,7 +38,7 @@ export default function Results() {
   const { streak, recordResult } = useStreak()
 
   const saved = getSavedState()
-  const todayKey = getTodayKey()
+  const todayKey = getTodayPacific()
 
   // Redirect if quiz not finished
   useEffect(() => {
@@ -50,15 +47,20 @@ export default function Results() {
     }
   }, [])
 
+  const answers = saved?.answers ?? []
+  const score = answers.filter(a => a.correct).length
+
+  useEffect(() => {
+    if (saved && saved.dateKey === todayKey && saved.status === 'finished') 
+      { recordResult(score) }
+
+      }, [])
+  
   if (!saved || saved.status !== 'finished') return null
 
-  const answers = saved.answers ?? []
-  const score = answers.filter(a => a.correct).length
-  const questions = saved.questions ?? []
+
   const grade = getGrade(score)
 
-  // Record streak once
-  useEffect(() => { recordResult(score) }, [])
 
   function handleShare() {
     const quizNum = Math.floor((new Date() - new Date('2025-01-01')) / 86400000) + 1
@@ -109,7 +111,7 @@ export default function Results() {
             <div className={styles.rowBarWrap}>
               <div
                 className={`${styles.rowBar} ${ans.correct ? styles.barCorrect : styles.barWrong}`}
-                style={{ width: ans.correct ? '100%' : '30%' }}
+                style={{ width: ans.correct ? '100%' : '100%' }}
               />
             </div>
             <div className={styles.rowIcon} style={{ color: ans.correct ? '#22c55e' : '#ef4444' }}>
