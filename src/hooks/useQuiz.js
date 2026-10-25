@@ -1,6 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { getDailyQuestions, getDailySeed } from '@/utils/dailySeed'
-import { questions as localQuestions } from '@/data/questions'
 import { getTodayPacific } from '../utils/pacificDate'
 import { supabase } from '@/lib/supabase'
 
