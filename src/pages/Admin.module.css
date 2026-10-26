@@ -1,0 +1,206 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+  color: #fff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 28px;
+  margin: 0;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+  margin: 80px auto 0;
+}
+
+.input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #151515;
+  color: #fff;
+  font-size: 16px;
+}
+
+.day {
+  margin-bottom: 40px;
+}
+
+.dayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.date {
+  margin: 0;
+  font-size: 20px;
+}
+
+.muted {
+  color: #888;
+  margin: 4px 0 0;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.card {
+  background: #151515;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.category {
+  color: #ee7230;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.pending {
+  background: #3a2f10;
+  color: #f5c542;
+}
+
+.approved {
+  background: #12331e;
+  color: #4ade80;
+}
+
+.rejected {
+  background: #3a1414;
+  color: #ff6b6b;
+}
+
+.question {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+
+.options {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+
+.option,
+.correct {
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  background: #1c1c1c;
+}
+
+.correct {
+  background: #12331e;
+  border: 1px solid #4ade80;
+}
+
+.detail {
+  color: #999;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primary,
+.danger,
+.ghost {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+
+.primary {
+  background: #ee7230;
+}
+
+.danger {
+  background: #7a2020;
+}
+
+.ghost {
+  background: transparent;
+  border: 1px solid #333;
+}
+
+.primary:disabled,
+.danger:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.editOption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.editCorrect {
+  border-color: #4ade80;
+  background: #0f1f15;
+}

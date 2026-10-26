@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTodayPacific } from '../utils/pacificDate'
 import { useStreak } from '@/hooks/useStreak'
+import ReviewList from '@/components/ReviewList'
 import styles from './Results.module.css'
 
 
@@ -48,6 +49,7 @@ export default function Results() {
   }, [])
 
   const answers = saved?.answers ?? []
+  const questions = saved?.questions ?? []
   const score = answers.filter(a => a.correct).length
 
   useEffect(() => {
@@ -120,6 +122,10 @@ export default function Results() {
           </div>
         ))}
       </div>
+
+      <ReviewList questions={questions} answers={answers} />
+
+      {/* Actions */}
 
       {/* Actions */}
       <button className={styles.shareBtn} onClick={handleShare}>
