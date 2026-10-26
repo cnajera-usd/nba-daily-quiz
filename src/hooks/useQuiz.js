@@ -24,7 +24,7 @@ export function useQuiz() {
           setLoading(false)
           return
         }
-        if (data.length === 0) {
+        if (data.length === 0 || data.some(row => !row.questions)) {
           setProblem('empty')
           setLoading(false)
           return
