@@ -17,6 +17,7 @@ export default function Quiz() {
     startQuiz,
     submitAnswer,
     nextQuestion,
+    problem,
   } = useQuiz()
 
   // Auto-start and handle navigation
@@ -25,6 +26,32 @@ export default function Quiz() {
     if (status === 'finished') navigate('/results')
   }, [status, startQuiz, navigate])
 
+  // No quiz today, or the request failed
+  if (problem) {
+    const isEmpty = problem === 'empty'
+    return (
+      <div className={styles.shell}>
+        <div className={styles.message}>
+          <div className={styles.messageTitle}>
+            {isEmpty ? "Today's quiz isn't ready yet" : "Couldn't load today's quiz"}
+          </div>
+          <p className={styles.messageText}>
+            {isEmpty
+              ? 'A new quiz goes live every day at midnight Pacific. Check back soon!'
+              : 'Something went wrong on our end. Please try again in a moment.'}
+          </p>
+          <button
+            className={styles.messageBtn}
+            onClick={() => (isEmpty ? navigate('/') : window.location.reload())}
+          >
+            {isEmpty ? '← Back to Home' : 'Try again'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Still loading
   if (loading || !currentQuestion) {
     return (
       <div className={styles.loading}>
@@ -79,7 +106,7 @@ export default function Quiz() {
               <span className={styles.optText}>{opt}</span>
               {hasAnswered && currentQuestion.options_details?.[i] && (
                 <span className={styles.optDetails}>
-                  {currentQuestion.options_details?.[i]}
+                  {currentQuestion.options_details[i]}
                 </span>
               )}
               {hasAnswered && i === currentQuestion.answerIndex && (

@@ -10,16 +10,29 @@ export function useQuiz() {
   const [answers, setAnswers] = useState([])   // array of { selected, correct }
   const [status, setStatus] = useState('idle') // idle | playing | finished
   const [loading, setLoading] = useState(true)
+  const [problem, setProblem] = useState(null)
 
   // Load questions (from Supabase if available, else local)
   useEffect(() => {
     async function loadQuestions() {
-      
 
       if (supabase) {
         const { data, error } = await supabase.from('daily_quizzes').select('position, questions(*)').eq('date', getTodayPacific()).order('position')
+        if (error) {
+          setProblem('error')
+          console.error(error)
+          setLoading(false)
+          return
+        }
+        if (data.length === 0) {
+          setProblem('empty')
+          setLoading(false)
+          return
+        }
         const daily = data.map(row => ({...row.questions, answerIndex: row.questions.answer_index }))
         setQuestions(daily)
+        } else {
+          setProblem('error')
 
 
       }
@@ -95,5 +108,7 @@ export function useQuiz() {
     startQuiz,
     submitAnswer,
     nextQuestion,
+    problem,
+
   }
 }
