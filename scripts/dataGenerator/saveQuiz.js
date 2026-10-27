@@ -60,11 +60,12 @@ export async function getRecentQuestions() {
 
 }
 
-export function getTomorrowPacific() {
+export function getDatePacific(daysAhead = 1) {
 
+    
     const todayString = new Date().toLocaleDateString('en-CA', {timeZone: 'America/Los_Angeles'} )
     const date = new Date(todayString + 'T12:00:00Z')
-    date.setUTCDate(date.getUTCDate() + 1) 
+    date.setUTCDate(date.getUTCDate() + daysAhead) 
     const correctDateString = date.toISOString().split('T')[0]
 
     return correctDateString

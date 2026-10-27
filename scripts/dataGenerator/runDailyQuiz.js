@@ -1,12 +1,12 @@
 import { generateDailyQuiz } from "./dailyQuizGenerator.js";
-import { saveQuizToSupabase, getRecentQuestions, getTomorrowPacific, quizExistsForDate } from "./saveQuiz.js";
+import { saveQuizToSupabase, getRecentQuestions, getDatePacific, quizExistsForDate } from "./saveQuiz.js";
 
 
 
 async function runDailyQuiz() {
     
         try {
-            const dateTomorrow = getTomorrowPacific()
+            const dateTomorrow = getDatePacific()
             const checkForQuiz = await quizExistsForDate(dateTomorrow)
         if (checkForQuiz) {
             console.log("Quiz already exists for", dateTomorrow)
