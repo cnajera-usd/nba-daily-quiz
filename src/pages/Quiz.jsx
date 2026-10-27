@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '@/hooks/useQuiz'
+import HelpModal from '../components/HelpModal'
 import styles from './Quiz.module.css'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
 export default function Quiz() {
   const navigate = useNavigate()
+  const [helpOpen, setHelpOpen] = useState(false)
   const {
     currentQuestion,
     currentIndex,
@@ -79,8 +81,18 @@ export default function Quiz() {
         <div className={styles.logo}>
           NBA <span className={styles.accent}>Quiz</span>
         </div>
-        <div className={styles.counter}>
-          {currentIndex + 1} <span className={styles.counterOf}>/ 10</span>
+        <div className={styles.headerRight}>
+          <button
+            className={styles.helpBtn}
+            onClick={() => setHelpOpen(true)}
+            aria-label="How to play"
+            title="How to play"
+          >
+            ?
+          </button>
+          <div className={styles.counter}>
+            {currentIndex + 1} <span className={styles.counterOf}>/ 10</span>
+          </div>
         </div>
       </div>
 
@@ -141,6 +153,7 @@ export default function Quiz() {
           {currentIndex === 9 ? 'See Results →' : 'Next Question →'}
         </button>
       </div>
+      {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
     </div>
   )
 }

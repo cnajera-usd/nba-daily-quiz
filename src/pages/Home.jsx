@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStreak } from '@/hooks/useStreak'
 import { getQuizNumber } from '@/utils/dailySeed'
 import { getTodayPacific } from '../utils/pacificDate'
+import HeaderButtons from '../components/HeaderButtons'
 import ThemeToggle from '@/components/ThemeToggle'
 import styles from './Home.module.css'
 
@@ -64,7 +65,7 @@ export default function Home() {
       </svg>
 
       <div className={styles.toggleSlot}>
-        <ThemeToggle />
+        <HeaderButtons />
       </div>
 
       <div className={styles.header}>
@@ -131,6 +132,9 @@ export default function Home() {
       </button>
 
       <div className={styles.dateLabel}>{today}</div>
+      <p className={styles.disclaimer}>
+        Not affiliated with or endorsed by the NBA or any NBA team.
+      </p>
     </div>
   )
 }

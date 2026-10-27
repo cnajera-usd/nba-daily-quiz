@@ -202,7 +202,7 @@
   text-align: center;
   color: var(--text-3);
   font-size: 12px;
-  padding: 8px 0 32px;
+  padding: 8px 0 12px;
 }
 
 @media (min-width: 900px) {
@@ -241,4 +241,13 @@
   .streakIcon { display: none; }
   .flame { display: inline-block; }
   .statLabel, .streakLabel { letter-spacing: 0.5px; }
+}
+
+.disclaimer {
+  margin-top: auto;
+  padding: 0 24px 24px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-3);
 }
