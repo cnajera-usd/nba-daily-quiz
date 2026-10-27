@@ -66,9 +66,9 @@ export function getDatePacific(daysAhead = 1) {
     const todayString = new Date().toLocaleDateString('en-CA', {timeZone: 'America/Los_Angeles'} )
     const date = new Date(todayString + 'T12:00:00Z')
     date.setUTCDate(date.getUTCDate() + daysAhead) 
-    const correctDateString = date.toISOString().split('T')[0]
 
-    return correctDateString
+    return date.toISOString().split('T')[0]
+
 
 
 }
