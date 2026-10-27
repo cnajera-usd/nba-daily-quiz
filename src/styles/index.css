@@ -1,39 +1,92 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&display=swap');
 
+/* ---------- ARENA NIGHT (dark, default) ---------- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-page: #030406;
+  --bg: #07090d;
+  --surface: #0e1219;
+  --surface-2: #161c27;
+  --ink: #3a4660;       /* borders on big containers */
+  --edge: #263044;      /* borders on small interactive items */
+  --line: #1a2130;      /* subtle dividers */
+  --text: #f2f5fa;
+  --text-2: #98a3b8;
+  --text-3: #5d687d;
+  --accent: #FF8A1F;
+  --accent-hover: #ffa047;
+  --accent-ink: #0b0d12;
+  --accent-dim: #1f1405;
+  --green: #22d37a;
+  --green-dim: #08201a;
+  --green-text: #8bf0bc;
+  --red: #ff4d5e;
+  --red-dim: #24090d;
+  --red-text: #ff9aa5;
+  --glow: rgba(255, 138, 31, 0.35);
+  --hero-glow: rgba(255, 138, 31, 0.12);
+  --shadow-color: rgba(255, 138, 31, 0.35);
+}
+
+/* ---------- DAYLIGHT (light) ---------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-page: #dfe5ee;
+  --bg: #eef2f7;
+  --surface: #ffffff;
+  --surface-2: #e6ebf2;
+  --ink: #1b2433;
+  --edge: #c3ccda;
+  --line: #d5dce8;
+  --text: #0b1220;
+  --text-2: #4a566b;
+  --text-3: #8592a6;
+  --accent: #E8590C;
+  --accent-hover: #cf4e08;
+  --accent-ink: #ffffff;
+  --accent-dim: #ffe9d9;
+  --green: #12a150;
+  --green-dim: #dcfce9;
+  --green-text: #0b5d33;
+  --red: #d92d3f;
+  --red-dim: #fde4e7;
+  --red-text: #7a1220;
+  --glow: rgba(232, 89, 12, 0.18);
+  --hero-glow: rgba(232, 89, 12, 0.07);
+  --shadow-color: rgba(232, 89, 12, 0.18);
+}
+
+/* ---------- SHARED TOKENS ---------- */
 :root {
-  --bg-base: #0f0f0f;
-  --bg-surface: #1a1a1a;
-  --bg-elevated: #222222;
-  --border: #2a2a2a;
-  --border-light: #1e1e1e;
-
-  --text-primary: #ffffff;
-  --text-secondary: #888888;
-  --text-muted: #555555;
-
-  --accent: #FF6B00;
-  --accent-hover: #e05e00;
-  --accent-dim: #1e1208;
-
-  --green: #22c55e;
-  --green-dim: #0d1f12;
-  --red: #ef4444;
-  --red-dim: #1f0d0d;
-
-  --font-display: 'Barlow Condensed', sans-serif;
+  --font-display: 'Chakra Petch', sans-serif;
   --font-body: 'Barlow', sans-serif;
 
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
+
+  --bw: 1px;
+  --shadow: 0 0 22px var(--glow);
+  --shadow-sm: 0 0 12px var(--glow);
+
+  /* legacy names, so older files keep working */
+  --bg-base: var(--bg);
+  --bg-surface: var(--surface);
+  --bg-elevated: var(--surface-2);
+  --border: var(--line);
+  --border-light: var(--line);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-2);
+  --text-muted: var(--text-3);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body, #root {
-  height: 100%;
-  background: #060606;
-  color: var(--text-primary);
+  min-height: 100%;
+  background: var(--bg-page);
+  color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }

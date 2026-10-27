@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useStreak } from '@/hooks/useStreak'
 import { getQuizNumber } from '@/utils/dailySeed'
 import { getTodayPacific } from '../utils/pacificDate'
+import ThemeToggle from '@/components/ThemeToggle'
 import styles from './Home.module.css'
-
 
 function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
@@ -11,7 +11,7 @@ function getSavedState() {
 
 export default function Home() {
   const navigate = useNavigate()
-  const { streak, bestStreak, totalPlayed, winPct, averageScore } = useStreak()
+  const { streak, bestStreak, totalPlayed, averageScore } = useStreak()
 
   const saved = getSavedState()
   const todayKey = getTodayPacific()
@@ -21,22 +21,54 @@ export default function Home() {
 
   const quizNumber = getQuizNumber()
   const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long', month: 'long', day: 'numeric', timeZone:'America/Los_Angeles'
-
+    weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles',
   })
 
   return (
     <div className={styles.shell}>
-      <svg className={styles.court} viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="210" cy="200" r="70" fill="none" stroke="white" strokeWidth="2" />
-        <line x1="0" y1="155" x2="420" y2="155" stroke="white" strokeWidth="1.5" />
-        <rect x="120" y="155" width="180" height="70" fill="none" stroke="white" strokeWidth="1.5" />
-        <rect x="155" y="155" width="110" height="45" fill="none" stroke="white" strokeWidth="1.5" />
-        <circle cx="210" cy="155" r="22" fill="none" stroke="white" strokeWidth="1.5" />
+      <svg
+        className={styles.court}
+        viewBox="0 0 500 470"
+        preserveAspectRatio="xMidYMin slice"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        {/* tinted paint */}
+        <rect className={styles.courtKey} x="170" y="0" width="160" height="190" />
+
+        <g fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* sidelines, baseline and half-court line */}
+          <rect x="1" y="1" width="498" height="468" />
+
+          {/* lane */}
+          <path d="M170 0 V190 H330 V0" />
+
+          {/* free-throw circle: solid outside the lane, dashed inside */}
+          <path d="M190 190 A60 60 0 0 0 310 190" />
+          <path d="M190 190 A60 60 0 0 1 310 190" strokeDasharray="8 8" />
+
+          {/* backboard, neck and rim */}
+          <path d="M220 40 H280" strokeWidth="4" />
+          <path d="M250 40 V45" />
+          <circle cx="250" cy="52.5" r="7.5" />
+
+          {/* restricted area */}
+          <path d="M210 40 V52.5 A40 40 0 0 0 290 52.5 V40" />
+
+          {/* three-point line */}
+          <path d="M30 0 V142 A237.5 237.5 0 0 0 470 142 V0" />
+
+          {/* half-court circle */}
+          <path d="M190 469 A60 60 0 0 1 310 469" />
+        </g>
       </svg>
 
+      <div className={styles.toggleSlot}>
+        <ThemeToggle />
+      </div>
+
       <div className={styles.header}>
-        <div className={styles.badge}>Daily Quiz</div>
+        <div className={styles.badge}>Daily Quiz &bull; #{quizNumber}</div>
         <h1 className={styles.title}>
           NBA<br /><span className={styles.accent}>Hoops</span><br />Quiz
         </h1>
@@ -47,17 +79,17 @@ export default function Home() {
         <div className={styles.streakIcon}>🔥</div>
         <div>
           <div className={styles.streakLabel}>Current streak</div>
-          <div className={styles.streakVal}>{streak}</div>
+          <div className={styles.streakVal}><span className={styles.flame}>🔥</span>{streak}</div>
         </div>
         <div className={styles.divider} />
         <div className={styles.statCol}>
           <div className={styles.statVal}>{totalPlayed}</div>
-          <div className={styles.statLabel}>Played</div>
+          <div className={styles.statLabel}>Quizzes Played</div>
         </div>
         <div className={styles.divider} />
         <div className={styles.statCol}>
           <div className={styles.statVal}>{averageScore}</div>
-          <div className={styles.statLabel}>Average Score</div>
+          <div className={styles.statLabel}>Avg Score</div>
         </div>
         <div className={styles.divider} />
         <div className={styles.statCol}>
@@ -98,9 +130,7 @@ export default function Home() {
         {alreadyPlayed ? "See Today's Results" : inProgress ? 'Continue Quiz ›' : "Play Today's Quiz ›"}
       </button>
 
-      <div className={styles.dateLabel}>
-        {today} &bull; Quiz #{quizNumber}
-      </div>
+      <div className={styles.dateLabel}>{today}</div>
     </div>
   )
 }

@@ -68,7 +68,7 @@ export default function Results() {
     const quizNum = Math.floor((new Date() - new Date('2025-01-01')) / 86400000) + 1
     const text = buildShareText(answers, score, quizNum)
     if (navigator.share) {
-      navigator.share({ text })
+      navigator.share({ text }).catch(() => {})
     } else {
       navigator.clipboard.writeText(text).then(() => alert('Result copied to clipboard!'))
     }

@@ -1,0 +1,30 @@
+.shell {
+  background:
+    radial-gradient(120% 55% at 50% 0%, var(--hero-glow), transparent 65%),
+    var(--bg);
+  color: var(--text);
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 600px) {
+  .shell {
+    max-width: 640px;
+    min-height: calc(100vh - 64px);
+    margin: 32px auto;
+    border: var(--bw) solid var(--ink);
+    border-radius: 18px;
+    box-shadow: 0 0 80px var(--glow);
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 900px) {
+  .shell {
+    max-width: 760px;
+  }
+}
