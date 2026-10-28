@@ -5,20 +5,32 @@ import { saveQuizToSupabase, getRecentQuestions, getDatePacific, quizExistsForDa
 
 async function runDailyQuiz() {
     
-        try {
-            const dateTomorrow = getDatePacific()
-            const checkForQuiz = await quizExistsForDate(dateTomorrow)
-        if (checkForQuiz) {
-            console.log("Quiz already exists for", dateTomorrow)
-        } else {
+        const daysAhead = Number(process.argv[2] ?? 1)
 
-            const recentQuestions = await getRecentQuestions()
-            const createNewQuiz = await generateDailyQuiz(recentQuestions)
-            await saveQuizToSupabase(createNewQuiz, dateTomorrow)
-            console.log('Saved quiz for', dateTomorrow)
+        if (daysAhead < 1 || daysAhead > 14 || !Number.isInteger(daysAhead)) {
+            console.error("daysAhead was not a valid input")
+            process.exit(1)
         }
 
 
+        try {
+            
+        for (let i = 1; i <= daysAhead; i++){
+
+            const date = getDatePacific(i)
+            const checkForQuiz = await quizExistsForDate(date)
+
+            if (checkForQuiz) {
+            
+            console.log("Quiz already exists for", date)
+            } else {
+
+                const recentQuestions = await getRecentQuestions()
+                const createNewQuiz = await generateDailyQuiz(recentQuestions)
+                await saveQuizToSupabase(createNewQuiz, date)
+                console.log('Saved quiz for', date)
+            }
+        }
     } catch (error) {
         console.error("Error: ran into problem", error)
         process.exit(1)

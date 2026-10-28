@@ -71,9 +71,24 @@ export default function Home() {
       <div className={styles.header}>
         <div className={styles.badge}>Daily Quiz &bull; #{quizNumber}</div>
         <h1 className={styles.title}>
-          NBA<br /><span className={styles.accent}>Hoops</span><br />Quiz
+          Cribble
+          <svg className={styles.ball} viewBox="0 0 40 40" aria-hidden="true">
+            <defs>
+              <clipPath id="ballClip">
+                <circle cx="20" cy="20" r="18" />
+              </clipPath>
+            </defs>
+            <circle cx="20" cy="20" r="18" fill="var(--accent)" />
+            <g clipPath="url(#ballClip)" fill="none" stroke="#12161f" strokeWidth="2.2">
+              <path d="M20 0V40M0 20H40" />
+              <circle cx="-5.5" cy="20" r="16.6" />
+              <circle cx="45.5" cy="20" r="16.6" />
+            </g>
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#12161f" strokeWidth="1.8" />
+          </svg>
+          <br /><span className={styles.accent}></span><br />
         </h1>
-        <p className={styles.subtitle}>10 questions &bull; New quiz every day</p>
+        <p className={styles.subtitle}>10 questions &bull; A daily hoops quiz</p>
       </div>
 
       <div className={styles.streakBar}>

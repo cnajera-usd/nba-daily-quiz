@@ -7,8 +7,8 @@ import { ensuredCache, tierPicker, pickSeasonFromTier, standingsTiers, randomCon
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
 
 
-// Test the randomContractQuestionGenerator function
-// console.log(await randomContractQuestionGenerator())
+//Test the randomContractQuestionGenerator function
+console.log(await randomContractQuestionGenerator())
 
 
 // Test the randomDraftQuestionGenerator function

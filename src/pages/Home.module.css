@@ -251,3 +251,11 @@
   line-height: 1.4;
   color: var(--text-3);
 }
+
+.ball {
+  display: inline-block;
+  width: 0.78em;
+  height: 0.78em;
+  margin-left: 0.08em;
+  vertical-align: -0.04em; /* sits the ball on the baseline */
+}
