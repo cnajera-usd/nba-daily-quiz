@@ -60,17 +60,38 @@
 }
 
 .title {
-  font-family: var(--font-display);
-  font-size: 64px;
-  font-weight: 900;
-  line-height: 0.92;
-  color: var(--text);
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  margin-bottom: 14px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
 }
 
-.accent { color: var(--accent); }
+.titleTop {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.titleBig {
+  font-family: var(--font-display);
+  font-size: clamp(88px, 26vw, 140px);
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.ball {
+  display: inline-block;
+  width: 0.78em;
+  height: 0.78em;
+  margin-left: 0.03em;
+  vertical-align: -0.04em; /* sits the ball on the baseline */
+}
 
 .subtitle {
   font-size: 14px;
@@ -199,15 +220,34 @@
 }
 
 .dateLabel {
-  text-align: center;
-  color: var(--text-3);
-  font-size: 12px;
-  padding: 8px 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  padding: 10px 0 14px;
+}
+
+.dateLabel::before,
+.dateLabel::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--line);
+}
+
+.dateDay {
+  color: var(--accent);
+  text-shadow: 0 0 14px var(--glow);
 }
 
 @media (min-width: 900px) {
   .header { padding: 80px 56px 36px; }
-  .title { font-size: 96px; }
   .subtitle { font-size: 16px; }
   .streakBar { margin: 0 56px 28px; padding: 20px 28px; }
   .progressWrap { margin: 0 56px 28px; }
@@ -223,9 +263,7 @@
   text-shadow: 0 0 14px var(--glow);
 }
 
-.accent {
-  text-shadow: 0 0 28px var(--glow);
-}
+
 
 .statCol { min-width: 0; }
 
@@ -244,18 +282,27 @@
 }
 
 .disclaimer {
-  margin-top: auto;
-  padding: 0 24px 24px;
+  margin: auto 24px 0;
+  padding: 16px 0 24px;
+  border-top: 1px solid var(--line);
   text-align: center;
-  font-size: 11px;
-  line-height: 1.4;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1.7;
+  text-transform: uppercase;
+  text-wrap: balance;
   color: var(--text-3);
 }
 
-.ball {
-  display: inline-block;
-  width: 0.78em;
-  height: 0.78em;
-  margin-left: 0.08em;
-  vertical-align: -0.04em; /* sits the ball on the baseline */
+
+
+.streakBar,
+.progressWrap,
+.playBtn,
+.dateLabel,
+.disclaimer {
+  position: relative;
+  z-index: 1;
 }

@@ -4,6 +4,7 @@ import { getQuizNumber } from '@/utils/dailySeed'
 import { getTodayPacific } from '../utils/pacificDate'
 import HeaderButtons from '../components/HeaderButtons'
 import ThemeToggle from '@/components/ThemeToggle'
+import BallIcon from '../components/BallIcon'
 import styles from './Home.module.css'
 
 function getSavedState() {
@@ -24,6 +25,7 @@ export default function Home() {
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles',
   })
+  const [weekday, ...rest] = today.split(', ')
 
   return (
     <div className={styles.shell}>
@@ -70,25 +72,13 @@ export default function Home() {
 
       <div className={styles.header}>
         <div className={styles.badge}>Daily Quiz &bull; #{quizNumber}</div>
-        <h1 className={styles.title}>
-          Cribble
-          <svg className={styles.ball} viewBox="0 0 40 40" aria-hidden="true">
-            <defs>
-              <clipPath id="ballClip">
-                <circle cx="20" cy="20" r="18" />
-              </clipPath>
-            </defs>
-            <circle cx="20" cy="20" r="18" fill="var(--accent)" />
-            <g clipPath="url(#ballClip)" fill="none" stroke="#12161f" strokeWidth="2.2">
-              <path d="M20 0V40M0 20H40" />
-              <circle cx="-5.5" cy="20" r="16.6" />
-              <circle cx="45.5" cy="20" r="16.6" />
-            </g>
-            <circle cx="20" cy="20" r="18" fill="none" stroke="#12161f" strokeWidth="1.8" />
-          </svg>
-          <br /><span className={styles.accent}></span><br />
+        <h1 className={styles.title} aria-label="Starting Ten">
+          <span className={styles.titleTop} aria-hidden="true">Starting</span>
+          <span className={styles.titleBig} aria-hidden="true">
+            1<BallIcon className={styles.ball} />
+          </span>
         </h1>
-        <p className={styles.subtitle}>10 questions &bull; A daily hoops quiz</p>
+        <p className={styles.subtitle}>10 questions &bull; New every day</p>
       </div>
 
       <div className={styles.streakBar}>
@@ -146,7 +136,11 @@ export default function Home() {
         {alreadyPlayed ? "See Today's Results" : inProgress ? 'Continue Quiz ›' : "Play Today's Quiz ›"}
       </button>
 
-      <div className={styles.dateLabel}>{today}</div>
+      <div className={styles.dateLabel}>
+        <span>
+          <span className={styles.dateDay}>{weekday}</span> {rest.join(', ')}
+        </span>
+      </div>
       <p className={styles.disclaimer}>
         Not affiliated with or endorsed by the NBA or any NBA team.
       </p>

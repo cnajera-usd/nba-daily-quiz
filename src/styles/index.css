@@ -12,8 +12,8 @@
   --edge: #263044;      /* borders on small interactive items */
   --line: #1a2130;      /* subtle dividers */
   --text: #f2f5fa;
-  --text-2: #98a3b8;
-  --text-3: #5d687d;
+  --text-2: #a9b3c7;
+  --text-3: #8a95aa;
   --accent: #FF8A1F;
   --accent-hover: #ffa047;
   --accent-ink: #0b0d12;
@@ -40,10 +40,10 @@
   --edge: #c3ccda;
   --line: #d5dce8;
   --text: #0b1220;
-  --text-2: #4a566b;
-  --text-3: #8592a6;
-  --accent: #E8590C;
-  --accent-hover: #cf4e08;
+  --text-2: #3f4a5e;
+  --text-3: #5d6a80;
+  --accent: #CC4A0A;
+  --accent-hover: #B24008;
   --accent-ink: #ffffff;
   --accent-dim: #ffe9d9;
   --green: #12a150;

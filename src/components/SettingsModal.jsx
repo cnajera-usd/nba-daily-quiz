@@ -25,7 +25,7 @@ export default function SettingsModal({ onClose }) {
       </div>
 
       <p className={styles.about}>
-        A new 10-question NBA quiz every day. Your stats are saved on this device.
+        Starting 10: a new 10-question NBA quiz every day. Your stats are saved on this device.
       </p>
 
       <p className={styles.disclaimer}>

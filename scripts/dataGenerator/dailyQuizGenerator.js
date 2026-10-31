@@ -2,7 +2,6 @@ import fs from 'fs';
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam, getMaxRankForGroup } from "./processor.js";
 import { contractQuestionGenerator, draftQuestionGenerator, statLeaderQuestion, standingsQuestion } from "./templates/questionGenerators.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
-import { loadESLint } from 'eslint';
 
 
 function randomInRange(start, end) {
@@ -200,9 +199,25 @@ async function generateDailyQuiz(recentQuestions) {
         questions.push(question)
     }
 
-    return questions
+    const shuffledQuestions = shuffle(questions)
+    
+
+
+    return shuffledQuestions
 }
 
+function shuffle(arr) {
+    const copy = [...arr]
+    for (let i = copy.length -1 ; i > 0; i--) {
+        const j = randomInRange(0, i);
+        [copy[i], copy[j]] = [copy[j], copy[i]]
+
+    }
+
+    return copy
+
+
+}
 
 
 

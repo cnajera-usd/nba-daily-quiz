@@ -79,7 +79,7 @@ export default function Quiz() {
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.logo}>
-          NBA <span className={styles.accent}>Quiz</span>
+          Starting <span className={styles.accent}>10</span>
         </div>
         <div className={styles.headerRight}>
           <button
@@ -117,7 +117,10 @@ export default function Quiz() {
               <span className={styles.optLetter}>{LETTERS[i]}</span>
               <span className={styles.optText}>{opt}</span>
               {hasAnswered && currentQuestion.options_details?.[i] && (
-                <span className={styles.optDetails}>
+                <span
+                  className={styles.optDetails}
+                  style={{ animationDelay: `${i * 70}ms` }}
+                >
                   {currentQuestion.options_details[i]}
                 </span>
               )}
@@ -135,16 +138,19 @@ export default function Quiz() {
       {/* Footer */}
       <div className={styles.footer}>
         {hasAnswered && (
-          <div className={styles.feedback}>
-            {currentAnswer?.correct ? (
-              <span className={styles.feedbackCorrect}>Correct! 🎯</span>
-            ) : (
-              <span className={styles.feedbackWrong}>
-                The answer was <strong>{currentQuestion.options[currentQuestion.answerIndex]}</strong>
+        <div className={styles.feedback} role="status">
+          {currentAnswer?.correct ? (
+            <span className={styles.feedbackCorrect}>✓ Correct</span>
+          ) : (
+            <span className={styles.feedbackWrong}>
+              ✗ Incorrect
+              <span className={styles.srOnly}>
+                . The answer was {currentQuestion.options[currentQuestion.answerIndex]}
               </span>
-            )}
-          </div>
-        )}
+            </span>
+          )}
+        </div>
+      )}
         <button
           className={`${styles.nextBtn} ${hasAnswered ? styles.nextActive : ''}`}
           onClick={nextQuestion}

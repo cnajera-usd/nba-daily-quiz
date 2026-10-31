@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTodayPacific } from '../utils/pacificDate'
 import { useStreak } from '@/hooks/useStreak'
+import { getQuizNumber } from '@/utils/dailySeed'
+import HeaderButtons from '../components/HeaderButtons'
 import ReviewList from '@/components/ReviewList'
 import styles from './Results.module.css'
-
 
 function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
@@ -20,7 +21,7 @@ function getGrade(score) {
 
 function buildShareText(answers, score, quizNum) {
   const grid = answers.map(a => a.correct ? '🟠' : '⬛').join('')
-  return `NBA Daily Quiz #${quizNum}\n${score}/10\n\n${grid}\n\nnbadailyquiz.com`
+  return `Starting 10 #${quizNum}\n${score}/10\n\n${grid}\n\nstartingten.app`
 }
 
 function getNextQuizCountdown() {
@@ -31,12 +32,19 @@ function getNextQuizCountdown() {
   const diff = tomorrow - now
   const h = Math.floor(diff / 3600000)
   const m = Math.floor((diff % 3600000) / 60000)
-  return `${h}h ${m}m`
+  const s = Math.floor((diff % 60000) / 1000)
+  return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
 export default function Results() {
   const navigate = useNavigate()
   const { streak, recordResult } = useStreak()
+  const [timeLeft, setTimeLeft] = useState(getNextQuizCountdown)
+
+  useEffect(() => {
+    const id = setInterval(() => setTimeLeft(getNextQuizCountdown()), 1000)
+    return () => clearInterval(id)
+  }, [])
 
   const saved = getSavedState()
   const todayKey = getTodayPacific()
@@ -53,19 +61,17 @@ export default function Results() {
   const score = answers.filter(a => a.correct).length
 
   useEffect(() => {
-    if (saved && saved.dateKey === todayKey && saved.status === 'finished') 
-      { recordResult(score) }
+    if (saved && saved.dateKey === todayKey && saved.status === 'finished') {
+      recordResult(score)
+    }
+  }, [])
 
-      }, [])
-  
   if (!saved || saved.status !== 'finished') return null
-
 
   const grade = getGrade(score)
 
-
   function handleShare() {
-    const quizNum = Math.floor((new Date() - new Date('2025-01-01')) / 86400000) + 1
+    const quizNum = getQuizNumber()
     const text = buildShareText(answers, score, quizNum)
     if (navigator.share) {
       navigator.share({ text }).catch(() => {})
@@ -78,23 +84,34 @@ export default function Results() {
     <div className={styles.shell}>
       {/* Header */}
       <div className={styles.header}>
+        <div className={styles.toggleSlot}>
+          <HeaderButtons />
+        </div>
         <div className={styles.tag}>Quiz Complete</div>
         <div className={styles.score}>
           {score}<span className={styles.scoreDenom}>/10</span>
         </div>
         <div className={styles.grade}>{grade.label}</div>
         <div className={styles.gradeSub}>{grade.sub}</div>
+        <div className={styles.nextQuiz}>
+          <span className={styles.nextQuizDot} aria-hidden="true" />
+          <span className={styles.nextQuizLabel}>Next quiz in</span>
+          <span className={styles.nextQuizTime}>{timeLeft}</span>
+        </div>
+        <button className={styles.shareBtn} onClick={handleShare}>
+          Share Result ↗
+        </button>
       </div>
 
       {/* Stats row */}
       <div className={styles.statsRow}>
         <div className={styles.stat}>
-          <div className={styles.statVal} style={{ color: '#22c55e' }}>{score}</div>
+          <div className={styles.statVal} style={{ color: 'var(--green)' }}>{score}</div>
           <div className={styles.statLabel}>Correct</div>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.stat}>
-          <div className={styles.statVal} style={{ color: '#ef4444' }}>{10 - score}</div>
+          <div className={styles.statVal} style={{ color: 'var(--red)' }}>{10 - score}</div>
           <div className={styles.statLabel}>Wrong</div>
         </div>
         <div className={styles.statDivider} />
@@ -113,10 +130,13 @@ export default function Results() {
             <div className={styles.rowBarWrap}>
               <div
                 className={`${styles.rowBar} ${ans.correct ? styles.barCorrect : styles.barWrong}`}
-                style={{ width: ans.correct ? '100%' : '100%' }}
+                style={{ width: '100%' }}
               />
             </div>
-            <div className={styles.rowIcon} style={{ color: ans.correct ? '#22c55e' : '#ef4444' }}>
+            <div
+              className={styles.rowIcon}
+              style={{ color: ans.correct ? 'var(--green)' : 'var(--red)' }}
+            >
               {ans.correct ? '✓' : '✗'}
             </div>
           </div>
@@ -127,18 +147,9 @@ export default function Results() {
 
       {/* Actions */}
 
-      {/* Actions */}
-      <button className={styles.shareBtn} onClick={handleShare}>
-        Share Result ↗
-      </button>
-
       <button className={styles.homeBtn} onClick={() => navigate('/')}>
         ← Back to Home
       </button>
-
-      <div className={styles.countdown}>
-        Next quiz in {getNextQuizCountdown()}
-      </div>
     </div>
   )
 }

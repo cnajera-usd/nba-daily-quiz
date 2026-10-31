@@ -4,9 +4,10 @@
 
 .header {
   background: var(--surface);
-  padding: 40px 24px 28px;
+  padding: 64px 24px 28px;
   text-align: center;
   border-bottom: var(--bw) solid var(--line);
+  position: relative;
 }
 
 .tag {
@@ -143,29 +144,34 @@
 }
 
 .shareBtn {
-  margin: 24px 24px 10px;
-  width: calc(100% - 48px);
-  background: transparent;
-  color: var(--accent);
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  margin: 16px auto 0;
+  background: var(--accent);
+  color: var(--accent-ink);
   font-family: var(--font-display);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  border: var(--bw) solid var(--accent);
+  border: var(--bw) solid var(--ink);
   border-radius: 10px;
-  padding: 15px;
+  padding: 14px;
+  box-shadow: var(--shadow);
   cursor: pointer;
-  transition: background 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.1s;
 }
 
-.shareBtn:hover {
-  background: var(--accent-dim);
-  box-shadow: var(--shadow-sm);
+.shareBtn:hover { background: var(--accent-hover); }
+
+.shareBtn:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 0 var(--shadow-color);
 }
 
 .homeBtn {
-  margin: 0 24px 12px;
+  margin: 0 24px 32px;
   width: calc(100% - 48px);
   background: var(--surface);
   color: var(--text-2);
@@ -183,17 +189,62 @@
 
 .homeBtn:hover { color: var(--text); }
 
-.countdown {
-  text-align: center;
-  color: var(--text-3);
+.nextQuiz {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 9px 16px;
+  background: var(--accent-dim);
+  border: var(--bw) solid var(--edge);
+  border-radius: 999px;
+}
+
+.nextQuizDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: nextQuizPulse 1.6s ease-in-out infinite;
+}
+
+.nextQuizLabel {
+  font-family: var(--font-display);
   font-size: 12px;
-  padding-bottom: 32px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.nextQuizTime {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes nextQuizPulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nextQuizDot { animation: none; }
 }
 
 @media (min-width: 900px) {
-  .header { padding: 56px 56px 36px; }
+  .header { padding: 72px 56px 36px; }
   .statsRow { margin: 28px 56px 0; }
   .breakdown { margin: 28px 56px 0; }
-  .shareBtn { margin: 28px 56px 10px; width: calc(100% - 112px); }
-  .homeBtn { margin: 0 56px 12px; width: calc(100% - 112px); }
+  .homeBtn { margin: 0 56px 32px; width: calc(100% - 112px); }
+}
+
+.toggleSlot {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
 }

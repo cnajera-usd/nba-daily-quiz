@@ -95,9 +95,26 @@
 }
 
 .optDetails {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
   color: var(--text-2);
-  font-size: 13px;
-  margin-left: 8px;
+  animation: detailIn 0.3s ease-out both;
+}
+
+.correct .optDetails { color: var(--green-text); }
+.wrong .optDetails { color: var(--red-text); }
+
+@keyframes detailIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .optDetails { animation: none; }
 }
 
 .options {
@@ -148,7 +165,7 @@
   box-shadow: 0 3px 0 var(--red) !important;
 }
 
-.dimmed { opacity: 0.45; }
+.dimmed { opacity: 0.8; }
 
 .optLetter {
   width: 32px;
@@ -173,6 +190,7 @@
   color: var(--text);
   font-weight: 500;
   flex: 1;
+  min-width: 0;
 }
 
 .correct .optText { color: var(--green-text); }
@@ -196,14 +214,34 @@
 }
 
 .feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 12px;
-  font-size: 14px;
   min-height: 20px;
 }
 
-.feedbackCorrect { color: var(--green); font-weight: 600; }
-.feedbackWrong { color: var(--text-2); }
-.feedbackWrong strong { color: var(--text); }
+.feedbackCorrect,
+.feedbackWrong {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.feedbackCorrect { color: var(--green); }
+.feedbackWrong { color: var(--red); }
+
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 
 .nextBtn {
   width: 100%;
