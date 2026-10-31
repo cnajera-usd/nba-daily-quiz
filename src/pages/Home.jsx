@@ -142,6 +142,7 @@ export default function Home() {
         </span>
       </div>
       <p className={styles.disclaimer}>
+        <span className={styles.credit}>Made by Chris Najera</span>
         Not affiliated with or endorsed by the NBA or any NBA team.
       </p>
     </div>

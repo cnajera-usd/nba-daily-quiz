@@ -16,6 +16,24 @@ export default function HelpModal({ onClose }) {
         season that started in 2019 (2019-20). Draft questions use the year of the draft itself.
       </div>
 
+      <div className={styles.author}>
+        <h3 className={styles.authorTitle}>About</h3>
+        <p>
+          Built by Chris Najera, a software engineer who loves basketball.
+          For business questions or inquiries, contact{' '}
+          <a href="mailto:hello@startingten.app">hello@startingten.app</a>.
+        </p>
+        <p className={styles.links}>
+          <a href="https://github.com/cnajera-usd" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <span aria-hidden="true">&bull;</span>
+          <a href="https://www.linkedin.com/in/christopher-najera" target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+        </p>
+      </div>
+
       <p className={styles.disclaimer}>
         This game is not affiliated with or endorsed by the NBA or any NBA team.
       </p>
