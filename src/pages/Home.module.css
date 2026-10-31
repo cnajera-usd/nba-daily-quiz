@@ -306,3 +306,10 @@
   position: relative;
   z-index: 1;
 }
+
+.disclaimer span { display: block; }
+
+.credit {
+  margin-bottom: 4px;
+  color: var(--text-2);
+}
