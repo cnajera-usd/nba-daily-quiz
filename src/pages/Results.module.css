@@ -101,47 +101,54 @@
   letter-spacing: 1.5px;
   margin-bottom: 12px;
 }
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+}
 
-.row {
+.tile {
+  aspect-ratio: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 7px 0;
-  border-bottom: var(--bw) solid var(--line);
+  justify-content: center;
+  gap: 2px;
+  border-radius: 10px;
+  border: var(--bw) solid;
+  cursor: pointer;
+  font-family: var(--font-display);
+  transition: transform 0.1s;
 }
 
-.row:last-child { border-bottom: none; }
+.tile:active { transform: scale(0.95); }
 
-.rowNum {
-  font-size: 11px;
-  color: var(--text-3);
-  width: 24px;
-  flex-shrink: 0;
+.tileCorrect {
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+  border-color: var(--green);
+  color: var(--green-text);
 }
 
-.rowBarWrap {
-  flex: 1;
-  height: 6px;
-  background: var(--surface-2);
-  border-radius: 99px;
-  overflow: hidden;
+.tileWrong {
+  background: color-mix(in srgb, var(--red) 16%, transparent);
+  border-color: var(--red);
+  color: var(--red-text);
 }
 
-.rowBar {
-  height: 6px;
-  border-radius: 99px;
-  transition: width 0.6s ease;
+.tileNum {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
 }
 
-.barCorrect { background: var(--green); }
-.barWrong { background: var(--red); }
-
-.rowIcon {
-  font-size: 12px;
-  width: 16px;
-  text-align: right;
-  flex-shrink: 0;
+.tileMark {
+  font-size: 13px;
+  line-height: 1;
 }
+
+
 
 .shareBtn {
   display: block;
