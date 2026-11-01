@@ -40,7 +40,7 @@ export default function ReviewList({ questions, answers }) {
       )}
 
       {shown.map(({ q, number, answer }) => (
-        <div key={q.id ?? number} className={styles.card}>
+        <div key={q.id ?? number} id={`review-q-${number}`} className={styles.card}>
           <div className={styles.cardTop}>
             <span className={styles.category}>
               {number}. {q.category}

@@ -11,12 +11,27 @@ function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
 }
 
+const GRADES = [
+  { label: 'Air Ball 🧱',        sub: 'Even the rim felt bad for you.' },
+  { label: 'Air Ball 🧱',        sub: 'Even the rim felt bad for you.' },
+  { label: 'Summer League 😅',   sub: "Rough night. Tomorrow's a new quiz." },
+  { label: 'Practice Squad 📓',  sub: 'Back to film study.' },
+  { label: 'Bench Warmer 🪑',    sub: 'Keep studying the box scores.' },
+  { label: 'Role Player 📋',     sub: "Not bad, but there's room to improve." },
+  { label: 'Sixth Man 💪',       sub: 'Dependable off the bench.' },
+  { label: 'Starter 🏀',         sub: 'Solid. You earned your minutes.' },
+  { label: 'All-Star 🌟',        sub: 'You clearly watch the game.' },
+  { label: 'MVP ⭐',             sub: 'One miss from perfection.' },
+  { label: 'Hall of Famer 🏆',   sub: 'Perfect game. Put your jersey in the rafters.' },
+]
+
 function getGrade(score) {
-  if (score === 10) return { label: 'Perfect Game 🏆', sub: 'Flawless. Are you sure you\'re not an NBA scout?' }
-  if (score >= 8)  return { label: 'Sharp Shooter 🎯', sub: 'Great game! You really know your hoops.' }
-  if (score >= 6)  return { label: 'Sixth Man 🏀', sub: 'Solid effort. Keep watching those games!' }
-  if (score >= 4)  return { label: 'Bench Player 📋', sub: 'Not bad, but there\'s room to improve.' }
-  return           { label: 'Rookie 🧢', sub: 'Tough one. Come back tomorrow!' }
+  return GRADES[score] ?? GRADES[0]
+}
+
+function jumpToQuestion(i) {
+  const el = document.getElementById(`review-q-${i + 1}`)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 function buildShareText(answers, score, quizNum) {
@@ -122,28 +137,26 @@ export default function Results() {
       </div>
 
       {/* Breakdown */}
-      <div className={styles.breakdown}>
-        <div className={styles.breakdownLabel}>Question breakdown</div>
-        {answers.map((ans, i) => (
-          <div key={i} className={styles.row}>
-            <div className={styles.rowNum}>Q{i + 1}</div>
-            <div className={styles.rowBarWrap}>
-              <div
-                className={`${styles.rowBar} ${ans.correct ? styles.barCorrect : styles.barWrong}`}
-                style={{ width: '100%' }}
-              />
-            </div>
-            <div
-              className={styles.rowIcon}
-              style={{ color: ans.correct ? 'var(--green)' : 'var(--red)' }}
-            >
-              {ans.correct ? '✓' : '✗'}
-            </div>
+        <div className={styles.breakdown}>
+          <div className={styles.breakdownLabel}>Question breakdown</div>
+          <div className={styles.tiles}>
+            {answers.map((ans, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`${styles.tile} ${ans.correct ? styles.tileCorrect : styles.tileWrong}`}
+                onClick={() => jumpToQuestion(i)}
+                aria-label={`Question ${i + 1}: ${ans.correct ? 'correct' : 'missed'}`}
+              >
+                <span className={styles.tileNum}>{i + 1}</span>
+                <span className={styles.tileMark} aria-hidden="true">
+                  {ans.correct ? '✓' : '✗'}
+                </span>
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <ReviewList questions={questions} answers={answers} />
+        </div>
+      <ReviewList questions={questions} answers={answers}/>
 
       {/* Actions */}
 

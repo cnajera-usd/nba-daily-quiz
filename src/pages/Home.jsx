@@ -95,9 +95,9 @@ export default function Home() {
         <div className={styles.divider} />
         <div className={styles.statCol}>
           <div className={styles.statVal}>{averageScore}</div>
-          <div className={styles.statLabel}>Avg Score</div>
+          <div className={styles.statLabel}>Avg / 10</div>
         </div>
-        <div className={styles.divider} />
+          <div className={styles.divider} />
         <div className={styles.statCol}>
           <div className={styles.statVal}>{bestStreak}</div>
           <div className={styles.statLabel}>Best Streak</div>
