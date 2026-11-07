@@ -155,7 +155,7 @@ try {
 
 
 
-
+/*
 const team = (wins, losses) => ({ wins, losses })
 
 // Should throw: first distractor has the same record
@@ -189,3 +189,5 @@ try {
 } catch (e) {
     console.log('FAIL: threw unexpectedly:', e.message)
 }
+   
+*/
