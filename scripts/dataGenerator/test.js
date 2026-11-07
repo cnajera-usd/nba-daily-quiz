@@ -1,4 +1,4 @@
-import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contractQuestionGenerator, assertNoTie } from "./templates/questionGenerators.js";
+import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contractQuestionGenerator, assertNoTie, assertNoRecordTie } from "./templates/questionGenerators.js";
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 import { supabase } from './supabaseClient.js'
@@ -124,7 +124,7 @@ for (let i = 0; i < 50; i++) {
 console.log('done')
 */
 
-
+/*
 const fake = v => ({ value: v })
 
 // Should throw: 1.96 and 2.04 both round to "2.0"
@@ -150,3 +150,44 @@ try {
 } catch (e) {
     console.log('PASS (threw on last):', e.message)
 }
+
+*/
+
+
+
+/*
+const team = (wins, losses) => ({ wins, losses })
+
+// Should throw: first distractor has the same record
+try {
+    assertNoRecordTie([team(50, 32), team(50, 32), team(45, 37), team(40, 42)], 'conference', 'East', 2025)
+    console.log('FAIL: expected a throw')
+} catch (e) {
+    console.log('PASS (threw):', e.message)
+}
+
+// Should throw: only the LAST distractor ties
+try {
+    assertNoRecordTie([team(50, 32), team(45, 37), team(40, 42), team(50, 32)], 'conference', 'East', 2025)
+    console.log('FAIL: expected a throw')
+} catch (e) {
+    console.log('PASS (threw on last):', e.message)
+}
+
+// Should not throw: same wins but different losses (e.g. different game counts)
+try {
+    assertNoRecordTie([team(50, 32), team(50, 31), team(45, 37), team(40, 42)], 'conference', 'East', 2025)
+    console.log('PASS (no throw, same wins only)')
+} catch (e) {
+    console.log('FAIL: threw unexpectedly:', e.message)
+}
+
+// Should not throw: all different
+try {
+    assertNoRecordTie([team(50, 32), team(48, 34), team(45, 37), team(40, 42)], 'conference', 'East', 2025)
+    console.log('PASS (no throw)')
+} catch (e) {
+    console.log('FAIL: threw unexpectedly:', e.message)
+}
+   
+*/

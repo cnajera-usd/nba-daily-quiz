@@ -19,6 +19,15 @@ export function assertNoTie(leaders, stat_type, season) {
     }
 }
 
+export function assertNoRecordTie(standings, groupType, groupValue, season) {
+    const correctStanding = standings[0]
+    for (let i = 1; i < standings.length; i++) {
+        if (standings[i].wins === correctStanding.wins && standings[i].losses === correctStanding.losses) {
+            throw new Error(`Duplicate win-loss records found for ${groupType} ${groupValue} in season ${season}: ${correctStanding.wins}-${correctStanding.losses}`)
+        }
+    }
+}
+
 function finalizeAnswers(indexedAnswers) {
     const shuffledAnswers = shuffle(indexedAnswers)
     const options = shuffledAnswers.map(answer => answer.name)
@@ -146,6 +155,9 @@ function standingsQuestion(season, groupType, groupValue, rank) {
     const finalRanks = [rank, ...distractors]
 
     const standings = finalRanks.map(rank => getStandingByRank(season, groupType, groupValue, rank))
+    assertNoRecordTie(standings, groupType, groupValue, season)
+
+
     const indexedAnswers = standings.map((standing, index) => {
     return {
         name: `${standing.team.full_name}`,
