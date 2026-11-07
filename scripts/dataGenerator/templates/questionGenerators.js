@@ -10,6 +10,15 @@ function shuffle(array) {
   return arr
 }
 
+export function assertNoTie(leaders, stat_type, season) {
+    const roundedLeader = leaders[0].value.toFixed(1)
+    for (let i = 1; i < leaders.length; i++) {
+        if (roundedLeader === leaders[i].value.toFixed(1)) {
+            throw new Error(`Duplicate rounded values found for stat ${stat_type} in season ${season}: ${roundedLeader}`)
+        }
+    }
+}
+
 function finalizeAnswers(indexedAnswers) {
     const shuffledAnswers = shuffle(indexedAnswers)
     const options = shuffledAnswers.map(answer => answer.name)
@@ -59,7 +68,6 @@ function statLeaderQuestion(season, stat_type) {
         if (distractors.length === 3) {
             break
         }
-    
 
         const leader= getLeaderByRank(season, stat_type, candidateRank)
     
@@ -72,6 +80,8 @@ function statLeaderQuestion(season, stat_type) {
 
 
     const leaders = finalRanks.map(rank => getLeaderByRank(season, stat_type, rank))
+
+    assertNoTie(leaders, stat_type, season)
 
     const indexedAnswers = leaders.map((leader, index) => {
     return {

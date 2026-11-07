@@ -1,4 +1,4 @@
-import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contractQuestionGenerator } from "./templates/questionGenerators.js";
+import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contractQuestionGenerator, assertNoTie } from "./templates/questionGenerators.js";
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 import { supabase } from './supabaseClient.js'
@@ -6,9 +6,6 @@ import { saveQuizToSupabase, getRecentQuestions, getDatePacific, quizExistsForDa
 import { ensuredCache, tierPicker, pickSeasonFromTier, standingsTiers, randomContractQuestionGenerator, randomInRange,randomStandingsQuestionGenerator, randomDraftQuestionGenerator, randomStatLeaderQuestionGenerator, statLeaderTiers, generateDailyQuiz, generateUniqueQuestion } from './dailyQuizGenerator.js'
 console.log('KEY LOADED:', process.env.BALLDONTLIE_API_KEY ? `yes, length ${process.env.BALLDONTLIE_API_KEY.length}` : 'NO — undefined')
 
-
-//Test the randomContractQuestionGenerator function
-console.log(await randomContractQuestionGenerator())
 
 
 // Test the randomDraftQuestionGenerator function
@@ -128,3 +125,28 @@ console.log('done')
 */
 
 
+const fake = v => ({ value: v })
+
+// Should throw: 1.96 and 2.04 both round to "2.0"
+try {
+    assertNoTie([fake(2.04), fake(1.96), fake(1.5), fake(1.2)], 'stl', 2025)
+    console.log('FAIL: expected a throw')
+} catch (e) {
+    console.log('PASS (threw):', e.message)
+}
+
+// Should not throw
+try {
+    assertNoTie([fake(2.04), fake(1.8), fake(1.5), fake(1.2)], 'stl', 2025)
+    console.log('PASS (no throw)')
+} catch (e) {
+    console.log('FAIL: threw unexpectedly:', e.message)
+}
+
+// Should throw: only the LAST distractor ties
+try {
+    assertNoTie([fake(2.04), fake(1.5), fake(1.2), fake(1.96)], 'stl', 2025)
+    console.log('FAIL: expected a throw')
+} catch (e) {
+    console.log('PASS (threw on last):', e.message)
+}
