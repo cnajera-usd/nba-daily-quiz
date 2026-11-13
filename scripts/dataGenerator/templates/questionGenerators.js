@@ -10,6 +10,7 @@ function shuffle(array) {
   return arr
 }
 
+
 export function assertNoTie(leaders, stat_type, season) {
     const roundedLeader = leaders[0].value.toFixed(1)
     for (let i = 1; i < leaders.length; i++) {
