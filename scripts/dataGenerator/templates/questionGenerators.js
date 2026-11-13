@@ -10,6 +10,13 @@ function shuffle(array) {
   return arr
 }
 
+function formatSeason(season) {
+    const nextYear = Number(season) + 1
+    const endYear = String(nextYear).slice(-2)
+    return `${season}-${endYear}`
+}
+
+
 
 export function assertNoTie(leaders, stat_type, season) {
     const roundedLeader = leaders[0].value.toFixed(1)
@@ -71,7 +78,7 @@ const statNames = {
 }
 
 function statLeaderQuestion(season, stat_type) {
-   const question = `Who led the NBA in ${statNames[stat_type]} in the ${season} season?`
+   const question = `Who led the NBA in ${statNames[stat_type]} in the ${formatSeason(season)} season?`
 
     const distractors = []
     for (let candidateRank = 2; candidateRank <= 10; candidateRank++) {
@@ -131,7 +138,7 @@ function standingsQuestion(season, groupType, groupValue, rank) {
         groupLabel = `${groupValue} Division`
     }
 
-    const question = `Which team finished ${ordinalSuffix(rank)} in the ${groupLabel} in the ${season} season?`
+    const question = `Which team finished ${ordinalSuffix(rank)} in the ${groupLabel} in the ${formatSeason(season)} season?`
 
     const maxRank = getMaxRankForGroup(season, groupType, groupValue)
     const allRanks = Array.from({ length: maxRank }, (value, index) => index+1)
@@ -231,7 +238,7 @@ function contractQuestionGenerator(team_id, season) {
     const topContracts = getTopContractsByTeam(team_id, season)
     const shuffledContracts = shuffle(topContracts)
     const correctContract = shuffledContracts[0]
-    const distractorContracts = shuffledContracts.filter(contract => contract.cap_hit !== correctContract.cap_hit).slice(1, 4)
+    const distractorContracts = shuffledContracts.filter(contract => contract.cap_hit !== correctContract.cap_hit).slice(0, 3)
     const finalContracts = [correctContract, ...distractorContracts]
 
     const indexedAnswers = finalContracts.map((contract, index) => {
@@ -242,7 +249,7 @@ function contractQuestionGenerator(team_id, season) {
         }
     })
 
-    const question = `Which player made $${correctContract.cap_hit.toLocaleString('en-US')} in the ${season} season for the ${correctContract.team.full_name}?`
+    const question = `Which player made $${correctContract.cap_hit.toLocaleString('en-US')} in the ${formatSeason(season)} season for the ${correctContract.team.full_name}?`
     const shuffledAnswers = finalizeAnswers(indexedAnswers)
     
     return {
@@ -262,4 +269,4 @@ function contractQuestionGenerator(team_id, season) {
 
 
 
-export { statLeaderQuestion, standingsQuestion, draftQuestionGenerator, contractQuestionGenerator }
+export { statLeaderQuestion, standingsQuestion, draftQuestionGenerator, contractQuestionGenerator, formatSeason }
