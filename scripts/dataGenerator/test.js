@@ -1,4 +1,4 @@
-import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contractQuestionGenerator, assertNoTie, assertNoRecordTie } from "./templates/questionGenerators.js";
+import { standingsQuestion, statLeaderQuestion, draftQuestionGenerator, contractQuestionGenerator, assertNoTie, assertNoRecordTie, formatSeason } from "./templates/questionGenerators.js";
 import { getLeaderByRank, getStandingByRank, getPlayerByDraftPick, getTopContractsByTeam } from "./processor.js";
 import { fetchLeaders, fetchStandings, fetchAllPlayers, fetchTeamContracts, fetchSeasonAverages, fetchAllTeams } from './fetcher.js'
 import { supabase } from './supabaseClient.js'
@@ -191,3 +191,10 @@ try {
 }
    
 */
+
+
+
+console.log(formatSeason(2019))    // expect 2019-20
+console.log(formatSeason(1999))    // expect 1999-00
+console.log(formatSeason('2019'))  // expect 2019-20
+console.log(formatSeason(2009))    // expect 2009-10
