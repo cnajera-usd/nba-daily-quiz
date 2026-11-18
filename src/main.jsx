@@ -5,7 +5,7 @@ import { ensureSession } from './lib/auth'
 import '@/styles/index.css'
 import App from './App'
 
-await ensureSession()
+ensureSession()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
