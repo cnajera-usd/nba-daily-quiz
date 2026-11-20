@@ -135,6 +135,9 @@ export default function Home() {
       >
         {alreadyPlayed ? "See Today's Results" : inProgress ? 'Continue Quiz ›' : "Play Today's Quiz ›"}
       </button>
+      <button className={styles.leaderboardBtn} onClick={() => navigate('/leaderboard')}>
+        🏆 Leaderboard
+      </button>
 
       <div className={styles.dateLabel}>
         <span>
