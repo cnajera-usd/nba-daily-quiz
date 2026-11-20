@@ -314,3 +314,21 @@
   margin-bottom: 4px;
   color: var(--text-2);
 }
+
+
+.leaderboardBtn {
+  composes: playBtn;           /* reuses the Play button's width, font, letter-spacing and corners */
+  margin-top: 12px;
+  margin-bottom: 20px;
+  min-height: 48px;
+  padding-block: 10px;
+  font-size: 0.85em;
+  background: transparent;
+  color: var(--accent, #ff8a1f);
+  border: 2px solid var(--accent, #ff8a1f);
+  box-shadow: none;
+}
+
+.leaderboardBtn:hover {
+  background: color-mix(in srgb, var(--accent, #ff8a1f) 14%, transparent);
+}

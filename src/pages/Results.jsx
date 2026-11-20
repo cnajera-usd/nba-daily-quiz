@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTodayPacific } from '../utils/pacificDate'
 import { useStreak } from '@/hooks/useStreak'
+import { saveAttempt } from '../lib/attempts'
 import { getQuizNumber } from '@/utils/dailySeed'
 import HeaderButtons from '../components/HeaderButtons'
 import ReviewList from '@/components/ReviewList'
@@ -78,6 +79,7 @@ export default function Results() {
   useEffect(() => {
     if (saved && saved.dateKey === todayKey && saved.status === 'finished') {
       recordResult(score)
+      saveAttempt(todayKey, score, questions, answers)
     }
   }, [])
 
