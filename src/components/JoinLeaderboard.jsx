@@ -30,7 +30,7 @@ export default function JoinLeaderboard() {
         onClick={handleClick}
         disabled={profile === undefined}
       >
-        🏆 Leaderboard
+        {profile === null ? '🏆 Join Leaderboard' : '🏆 Leaderboard'}
       </button>
       {open && (
         <JoinLeaderboardModal
