@@ -315,9 +315,14 @@
   color: var(--text-2);
 }
 
-.privacyLink {
-  display: block;
+.disclaimer .legalLinks {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
   margin-top: 6px;
+}
+
+.legalLinks a {
   color: var(--text-2);
   text-decoration: underline;
 }

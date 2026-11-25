@@ -141,10 +141,13 @@ export default function Home() {
           <span className={styles.dateDay}>{weekday}</span> {rest.join(', ')}
         </span>
       </div>
-      <p className={styles.disclaimer}>
+            <p className={styles.disclaimer}>
         <span className={styles.credit}>Made by Chris Najera</span>
         Not affiliated with or endorsed by the NBA or any NBA team.
-        <Link to="/privacy" className={styles.privacyLink}>Privacy Policy</Link>
+        <span className={styles.legalLinks}>
+          <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/terms">Terms of Service</Link>
+        </span>
       </p>
     </div>
   )
