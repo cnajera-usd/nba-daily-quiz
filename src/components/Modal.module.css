@@ -257,3 +257,32 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.secondaryBtn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: transparent;
+    color: var(--accent);
+    border: var(--bw) solid var(--accent);
+    font-family: var(--font-display);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+}
+
+.secondaryBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.smallBtn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background: transparent;
+  color: var(--accent);
+  border: var(--bw) solid var(--accent);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}

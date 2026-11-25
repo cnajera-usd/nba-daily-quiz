@@ -1,10 +1,17 @@
+import { useState } from 'react'
 import Modal from './Modal'
+import AccountModal from './AccountModal'
 import { useTheme } from '@/hooks/useTheme'
 import styles from './Modal.module.css'
 
 export default function SettingsModal({ onClose }) {
   const { theme, toggle } = useTheme()
   const isDark = theme === 'dark'
+  const [showAccount, setShowAccount] = useState(false)
+
+  if (showAccount) {
+    return <AccountModal onClose={() => setShowAccount(false)} />
+  }
 
   return (
     <Modal title="Settings" onClose={onClose}>
@@ -21,6 +28,16 @@ export default function SettingsModal({ onClose }) {
           onClick={toggle}
         >
           <span className={styles.knob} />
+        </button>
+      </div>
+
+      <div className={styles.row}>
+        <div>
+          <div className={styles.rowTitle}>Account</div>
+          <div className={styles.rowSub}>Save your progress and play on any device</div>
+        </div>
+        <button className={styles.smallBtn} onClick={() => setShowAccount(true)}>
+          Sign in
         </button>
       </div>
 
