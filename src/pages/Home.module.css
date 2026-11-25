@@ -332,3 +332,15 @@
 .leaderboardBtn:hover {
   background: color-mix(in srgb, var(--accent, #ff8a1f) 14%, transparent);
 }
+
+.disclaimer .legalLinks {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.legalLinks a {
+  color: var(--text-2);
+  text-decoration: underline;
+}

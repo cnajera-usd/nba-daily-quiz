@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useStreak } from '@/hooks/useStreak'
 import { getQuizNumber } from '@/utils/dailySeed'
 import { getTodayPacific } from '../utils/pacificDate'
@@ -144,9 +144,13 @@ export default function Home() {
           <span className={styles.dateDay}>{weekday}</span> {rest.join(', ')}
         </span>
       </div>
-      <p className={styles.disclaimer}>
+            <p className={styles.disclaimer}>
         <span className={styles.credit}>Made by Chris Najera</span>
         Not affiliated with or endorsed by the NBA or any NBA team.
+        <span className={styles.legalLinks}>
+          <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/terms">Terms of Service</Link>
+        </span>
       </p>
     </div>
   )
