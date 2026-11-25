@@ -314,3 +314,10 @@
   margin-bottom: 4px;
   color: var(--text-2);
 }
+
+.privacyLink {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-2);
+  text-decoration: underline;
+}
