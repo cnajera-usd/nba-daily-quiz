@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useStreak } from '@/hooks/useStreak'
 import { getQuizNumber } from '@/utils/dailySeed'
 import { getTodayPacific } from '../utils/pacificDate'
@@ -144,6 +144,7 @@ export default function Home() {
       <p className={styles.disclaimer}>
         <span className={styles.credit}>Made by Chris Najera</span>
         Not affiliated with or endorsed by the NBA or any NBA team.
+        <Link to="/privacy" className={styles.privacyLink}>Privacy Policy</Link>
       </p>
     </div>
   )
