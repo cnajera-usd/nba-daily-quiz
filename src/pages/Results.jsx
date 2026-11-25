@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTodayPacific } from '../utils/pacificDate'
 import { useStreak } from '@/hooks/useStreak'
+import { saveAttempt } from '../lib/attempts'
 import { getQuizNumber } from '@/utils/dailySeed'
 import HeaderButtons from '../components/HeaderButtons'
 import ReviewList from '@/components/ReviewList'
 import styles from './Results.module.css'
+import JoinLeaderboard from '@/components/JoinLeaderboard'
 
 function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
@@ -78,6 +80,7 @@ export default function Results() {
   useEffect(() => {
     if (saved && saved.dateKey === todayKey && saved.status === 'finished') {
       recordResult(score)
+      saveAttempt(todayKey, score, questions, answers)
     }
   }, [])
 
@@ -113,9 +116,12 @@ export default function Results() {
           <span className={styles.nextQuizLabel}>Next quiz in</span>
           <span className={styles.nextQuizTime}>{timeLeft}</span>
         </div>
+        <div className={styles.actions}>
         <button className={styles.shareBtn} onClick={handleShare}>
           Share Result ↗
         </button>
+        <JoinLeaderboard />
+      </div>
       </div>
 
       {/* Stats row */}
