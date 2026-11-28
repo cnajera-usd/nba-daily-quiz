@@ -1,5 +1,6 @@
 import {supabase } from './supabase'
 import { ensureSession } from './auth'
+import { getTodayPacific } from '../utils/pacificDate'
 
 export async function saveAttempt (quizDate, score, questions, answers) {
     if (!supabase) return
@@ -27,4 +28,28 @@ export async function saveAttempt (quizDate, score, questions, answers) {
     if (error && error.code !== '23505') {
         console.error('Failed to save attempt:', error.message)
     }
+}
+
+
+export async function fetchMyAttempts() {
+    if (!supabase) return []
+
+    const { data, error } = await supabase.from('attempts').select('quiz_date, score').order('quiz_date', { ascending: true })
+    if (error) {
+        console.error('Failed to fetch attempts:', error.message)
+        return []
+    }
+    return data
+}
+
+
+export async function fetchTodaysAttempt() {
+    if (!supabase) return null
+
+    const today = getTodayPacific()
+    const { data, error } = await supabase.from('attempts').select('score, answers').eq('quiz_date', today).maybeSingle()
+    if (error) {
+        console.error("Failed to fetch today's attempt:", error.message)
+    }
+    return data
 }

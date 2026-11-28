@@ -1,19 +1,23 @@
 import { useNavigate, Link } from 'react-router-dom'
-import { useStreak } from '@/hooks/useStreak'
+import { useMyStats } from '@/hooks/useMyStats'
 import { getQuizNumber } from '@/utils/dailySeed'
 import { getTodayPacific } from '../utils/pacificDate'
 import HeaderButtons from '../components/HeaderButtons'
 import ThemeToggle from '@/components/ThemeToggle'
 import BallIcon from '../components/BallIcon'
 import styles from './Home.module.css'
+import { useSyncToday } from '@/hooks/useSyncToday'
 
 function getSavedState() {
   try { return JSON.parse(localStorage.getItem('nba-quiz-state')) } catch { return null }
 }
 
+
+
 export default function Home() {
   const navigate = useNavigate()
-  const { streak, bestStreak, totalPlayed, averageScore } = useStreak()
+  const { streak, bestStreak, totalPlayed, averageScore } = useMyStats()
+  const synced = useSyncToday()
 
   const saved = getSavedState()
   const todayKey = getTodayPacific()
@@ -132,6 +136,7 @@ export default function Home() {
       <button
         className={styles.playBtn}
         onClick={() => navigate(alreadyPlayed ? '/results' : '/quiz')}
+        disabled={!synced}
       >
         {alreadyPlayed ? "See Today's Results" : inProgress ? 'Continue Quiz ›' : "Play Today's Quiz ›"}
       </button>

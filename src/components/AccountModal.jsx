@@ -18,10 +18,10 @@ export default function AccountModal({ onClose }) {
         }
     }, [])
 
-    async function handleGoogle(link) {
+    async function handleGoogle() {
         setBusy(true)
         setError('')
-        const result = await signInWithGoogle({ link })
+        const result = await signInWithGoogle()
         // On success the browser leaves for Google, so we only handle failure here
         if (!result.ok) {
             setError(result.message)
@@ -31,6 +31,7 @@ export default function AccountModal({ onClose }) {
 
     async function handleSignOut() {
         await signOut()
+        localStorage.removeItem('nba-quiz-state')
         window.location.reload() // main.jsx creates a fresh guest session on load
     }
 
@@ -48,26 +49,15 @@ export default function AccountModal({ onClose }) {
             ) : (
                 <>
                     <p className={styles.rules}>
-                        You're playing as a guest. Sign up with Google to keep your scores and
-                        username, and to play on any device.
+                        You're playing as a guest. Sign in with Google to keep your scores and username,
+                        and to play on any device.
                     </p>
-                    <button
-                        className={styles.primaryBtn}
-                        onClick={() => handleGoogle(true)}
-                        disabled={busy}
-                    >
-                        Sign up with Google (keep my progress)
-                    </button>
-                    <button
-                        className={styles.secondaryBtn}
-                        onClick={() => handleGoogle(false)}
-                        disabled={busy}
-                    >
-                        Sign in with Google
+                    <button className={styles.primaryBtn} onClick={handleGoogle} disabled={busy}>
+                        Continue with Google
                     </button>
                     <p className={styles.rules}>
-                        Already have an account? Sign in before playing. Scores you earned as a
-                        guest on this device won't carry over.
+                        Already have an account? Just use the same Google account. Scores you earned as a
+                        guest on this device won't carry over to an existing account.
                     </p>
                     {error && <div className={styles.error}>{error}</div>}
                 </>
